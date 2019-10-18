@@ -26,13 +26,21 @@
     **PyAutoGUI**
     **OpenCV-Python**
     **PyWin32**
+ 3. 下载脚本源代码。
 
- 3. 调整阴阳师窗口分辨率至固定合适大小（可选）：
+ 
+----------
+
+
+## 准备 ##
+
+ 1. 调整阴阳师窗口分辨率至固定大小（可选）：
     -打开阴阳师安装目录下的**neox.xml文件**，修改**WindowClientHeight**（窗口高度），**WindowClientWidth**（窗口宽度）。推荐宽度为683，高度为384。
 
- 4. 根据**screenshots文件夹**下的截图样例截取图片（推荐宽高下可跳过）。
+ 2. 根据**screenshots文件夹**下的截图样例截取图片（推荐宽高下可跳过）。
 
- 5. 运行**screenshots文件夹**下的**convert.py**：（可选，截取新截图后推荐，可防止libpng相关警告，需要安装**ImageMagick**，下附下载地址）
+ 3. 运行**screenshots文件夹**下的**convert.py**：（可选，截取新截图后推荐，可防止libpng相关警告，需要安装**ImageMagick**，下附下载地址）
+ 
     -打开**convert.py**文件修改**imageMagickPath**变量的值为**ImageMagick安装路径**后运行该脚本。
  
  [ImageMagick-6.2.7-Q16下载地址][2]
