@@ -399,7 +399,6 @@ def detectDisconnection(accountThread,startX,startY,windowWidth,windowHeight):
         message="账户:%s:正在重新连接。。。。。。"%(accountThread.name)
         printWithTime(message)
         winsound.Beep(1000,10000)
-        gui.alert(message,"警告",button="确定")
 	
 def detectInterception(startX,startY,windowWidth,windowHeight):
     global lastOperationTime
