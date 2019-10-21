@@ -1,6 +1,6 @@
 '''
 Project:FK-Onmyoji
-Version:Beta 1.0.0
+Version:Beta 1.0.1
 
 Powered By BluePlum Studio:lzycc234
 https://github.com/BluePlumStudio/FK-Onmyoji
@@ -30,6 +30,41 @@ feedbackerLocker=threading.Lock()
 lastOperationTime=time.time()
 isBossDetected=False
 
+IMAGE_FAILED_PATH="./screenshots/failed.png"
+IMAGE_SCREENSHOT_PATH="./screenshots/screenshot.png"
+IMAGE_CONNECTING_PATH="./screenshots/connecting.png"
+IMAGE_ASSISTANCE_PATH="./screenshots/assistance.png"
+IMAGE_ACCEPT_PATH="./screenshots/accept.png"
+IMAGE_OCCUPIED_PATH="./screenshots/occupied.png"
+
+IMAGE_MITAMA_START_PATH="./screenshots/Mitama/start.png"
+IMAGE_MITAMA_FINISHED1_PATH="./screenshots/Mitama/finished1.png"
+IMAGE_MITAMA_FINISHED2_PATH="./screenshots/Mitama/finished2.png"
+
+IMAGE_STROY_INVITE_PATH="./screenshots/Story/invite.png"
+IMAGE_STROY_INVITATION_CONFIRMED_PATH="./screenshots/Story/invitationConfirmed.png"
+IMAGE_STROY_START_PATH="./screenshots/Story/start.png"
+IMAGE_STROY_FIGHT_PATH="./screenshots/Story/fight.png"
+IMAGE_STROY_FIGHT_BOSS_PATH="./screenshots/Story/fightBoss.png"
+IMAGE_STROY_FINISHED1_PATH="./screenshots/Story/finished1.png"
+IMAGE_STROY_FINISHED2_PATH="./screenshots/Story/finished2.png"
+IMAGE_STROY_ACCEPT_PATH="./screenshots/Story/accept.png"
+IMAGE_STROY_BACK_PATH="./screenshots/Story/back.png"
+IMAGE_STROY_GET_REWARD_PATH="./screenshots/Story/getReward.png"
+IMAGE_STROY_REWARD_CONFIRMED_PATH="./screenshots/Story/rewardConfirmed.png"
+
+IMAGE_MITAMA_X_START_PATH="./screenshots/MitamaX/start.png"
+IMAGE_MITAMA_X_FINISHED1_PATH="./screenshots/MitamaX/finished1.png"
+IMAGE_MITAMA_X_FINISHED2_PATH="./screenshots/MitamaX/finished2.png"
+
+IMAGE_BREACH_START_PATH="./screenshots/Breach/start.png"
+IMAGE_BREACH_SECTION_PATH="./screenshots/Breach/section.png"
+IMAGE_BREACH_FINISHED1_PATH="./screenshots/Breach/finished1.png"
+IMAGE_BREACH_FINISHED2_PATH="./screenshots/Breach/finished2.png"
+IMAGE_BREACH_SHIKIGAMI_SELECTED_PATH="./screenshots/Breach/shikigamiSelected.png"
+IMAGE_BREACH_SELECTION_MARK_PATH="./screenshots/Breach/selectionMark.png"
+
+
 def getTimeFormatted():
     return time.strftime("[%Y-%m-%d %H:%M:%S]",time.localtime())
 
@@ -58,7 +93,7 @@ def resetMousePosition(startX,startY,windowWidth,windowHeight):
     gui.moveTo(startX+random.uniform(0.3,0.7)*windowWidth,
                startY+random.uniform(0.3,0.7)*windowHeight+30,
                0.2,
-               gui.easeInOutQuad)
+               gui.easeInElastic)
     mainLocker.release()
 
 def clickMouseRandomly(startX,startY,windowWidth,windowHeight):
@@ -68,7 +103,7 @@ def clickMouseRandomly(startX,startY,windowWidth,windowHeight):
     gui.moveTo(startX+random.uniform(0.3,0.7)*windowWidth,
                startY+random.uniform(0.3,0.7)*windowHeight+30,
                0.2,
-               gui.easeInOutQuad)
+               gui.easeInElastic)
     gui.click()
     lastOperationTime=time.time()
     mainLocker.release()
@@ -84,7 +119,7 @@ def clickImageRandomly(path,clicks=1,duration=0.1,startX=0,startY=0,windowWidth=
         offsetX,offsetY=genPositionOffsets(position)
         printWithTime("账户:%s:"%(threading.current_thread().name)+"clickImageRandomly():"+path+"\tPosition:"+"X="+str(x)+" Y="+str(y))
         printWithTime("账户:%s:"%(threading.current_thread().name)+"clickImageRandomly():"+path+"\t"+"OffsetX="+str(offsetX)+" OffsetY="+str(offsetY))
-        gui.moveTo(x+offsetX,y+offsetY,duration,gui.easeInOutQuad)
+        gui.moveTo(x+offsetX,y+offsetY,duration,gui.easeInElastic)
         gui.click(x+offsetX,y+offsetY,clicks,random.uniform(0.1,1))
         lastOperationTime=time.time()
         ret=True
@@ -105,7 +140,7 @@ def dragMouseRandomly(directionX,directionY,windowWidth,windowHeight):
     printWithTime("账户:%s:dragMouseRandomly():MoveX=%s MoveY=%s"%(threading.current_thread().name,str(moveX),str(moveY)))
     gui.mouseDown()
     #gui.drag(moveX,moveY,button="left")
-    gui.move(moveX,moveY,0.35,gui.easeInOutQuad)
+    gui.move(moveX,moveY,0.35,gui.easeInElastic)
     gui.mouseUp()
     lastOperationTime=time.time()
     mainLocker.release()
@@ -125,23 +160,23 @@ def gameTypeMitama(startX,startY,windowWidth,windowHeight,isCaptain):
     if isCaptain:
         time.sleep(3)
         printWithTime("消息:账户:%s:等待开始"%(threading.current_thread().name))
-        waitImageDetected("./screenshots/Mitama/start.png",startX,startY,windowWidth,windowHeight)
-        clickImageRandomly("./screenshots/Mitama/start.png",1,0.15,startX,startY,windowWidth,windowHeight)
-        while isImageDetected("./screenshots/Mitama/start.png",startX,startY,windowWidth,windowHeight):
-            clickImageRandomly("./screenshots/Mitama/start.png",1,0.15,startX,startY,windowWidth,windowHeight)
+        waitImageDetected(IMAGE_MITAMA_START_PATH,startX,startY,windowWidth,windowHeight)
+        clickImageRandomly(IMAGE_MITAMA_START_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
+        while isImageDetected(IMAGE_MITAMA_START_PATH,startX,startY,windowWidth,windowHeight):
+            clickImageRandomly(IMAGE_MITAMA_START_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
     ##########
     printWithTime("消息:账户:%s:等待结束界面1"%(threading.current_thread().name))
-    waitImageDetected("./screenshots/Mitama/finished1.png",startX,startY,windowWidth,windowHeight)
-    clickImageRandomly("./screenshots/Mitama/finished1.png",2,0.15,startX,startY,windowWidth,windowHeight)
-    while isImageDetected("./screenshots/Mitama/finished1.png",startX,startY,windowWidth,windowHeight):
-        clickImageRandomly("./screenshots/Mitama/finished1.png",1,0.15,startX,startY,windowWidth,windowHeight)
+    waitImageDetected(IMAGE_MITAMA_FINISHED1_PATH,startX,startY,windowWidth,windowHeight)
+    clickImageRandomly(IMAGE_MITAMA_FINISHED1_PATH,2,0.15,startX,startY,windowWidth,windowHeight)
+    while isImageDetected(IMAGE_MITAMA_FINISHED1_PATH,startX,startY,windowWidth,windowHeight):
+        clickImageRandomly(IMAGE_MITAMA_FINISHED1_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
     ##########
     time.sleep(0.5)
     printWithTime("消息:账户:%s:等待结束界面2"%(threading.current_thread().name))
-    waitImageDetected("./screenshots/Mitama/finished2.png",startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
-    clickImageRandomly("./screenshots/Mitama/finished2.png",2,0.15,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
-    while isImageDetected("./screenshots/Mitama/finished2.png",startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3)):
-        clickImageRandomly("./screenshots/Mitama/finished2.png",1,0.15,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
+    waitImageDetected(IMAGE_MITAMA_FINISHED2_PATH,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
+    clickImageRandomly(IMAGE_MITAMA_FINISHED2_PATH,2,0.15,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
+    while isImageDetected(IMAGE_MITAMA_FINISHED2_PATH,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3)):
+        clickImageRandomly(IMAGE_MITAMA_FINISHED2_PATH,1,0.15,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
 
 def gameTypeStory(startX,startY,windowWidth,windowHeight,isCaptain):
     global isBossDetected
@@ -149,28 +184,28 @@ def gameTypeStory(startX,startY,windowWidth,windowHeight,isCaptain):
     
     if isCaptain:
         printWithTime("消息:账户:%s:等待开始"%(threading.current_thread().name))
-        while (isImageDetected("./screenshots/Story/invite.png",startX,startY,windowWidth,windowHeight)==False
-               or isImageDetected("./screenshots/Story/invitationConfirmed.png",startX,startY,windowWidth,windowHeight)==False
-               or isImageDetected("./screenshots/Story/start.png",startX,startY,windowWidth,windowHeight))==False:
+        while (isImageDetected(IMAGE_STROY_INVITE_PATH,startX,startY,windowWidth,windowHeight)==False
+               or isImageDetected(IMAGE_STROY_INVITATION_CONFIRMED_PATH,startX,startY,windowWidth,windowHeight)==False
+               or isImageDetected(IMAGE_STROY_START_PATH,startX,startY,windowWidth,windowHeight))==False:
             continue
             
-        while (isImageDetected("./screenshots/Story/invite.png",startX,startY,windowWidth,windowHeight)
-               or isImageDetected("./screenshots/Story/invitationConfirmed.png",startX,startY,windowWidth,windowHeight)
-               or isImageDetected("./screenshots/Story/start.png",startX,startY,windowWidth,windowHeight)):
-            if isImageDetected("./screenshots/Story/invite.png",startX,startY,windowWidth,windowHeight):
-                clickImageRandomly("./screenshots/Story/invite.png",1,0.15,startX,startY,windowWidth,windowHeight)
-                while isImageDetected("./screenshots/Story/invite.png",startX,startY,windowWidth,windowHeight):
-                    clickImageRandomly("./screenshots/Story/invite.png",1,0.15,startX,startY,windowWidth,windowHeight)
+        while (isImageDetected(IMAGE_STROY_INVITE_PATH,startX,startY,windowWidth,windowHeight)
+               or isImageDetected(IMAGE_STROY_INVITATION_CONFIRMED_PATH,startX,startY,windowWidth,windowHeight)
+               or isImageDetected(IMAGE_STROY_START_PATH,startX,startY,windowWidth,windowHeight)):
+            if isImageDetected(IMAGE_STROY_INVITE_PATH,startX,startY,windowWidth,windowHeight):
+                clickImageRandomly(IMAGE_STROY_INVITE_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
+                while isImageDetected(IMAGE_STROY_INVITE_PATH,startX,startY,windowWidth,windowHeight):
+                    clickImageRandomly(IMAGE_STROY_INVITE_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
                 break
-            elif isImageDetected("./screenshots/Story/invitationConfirmed.png",startX,startY,windowWidth,windowHeight):
-                clickImageRandomly("./screenshots/Story/invitationConfirmed.png",1,0.15,startX,startY,windowWidth,windowHeight)
-                while isImageDetected("./screenshots/Story/invitationConfirmed.png",startX,startY,windowWidth,windowHeight):
-                    clickImageRandomly("./screenshots/Story/invitationConfirmed.png",1,0.15,startX,startY,windowWidth,windowHeight)
+            elif isImageDetected(IMAGE_STROY_INVITATION_CONFIRMED_PATH,startX,startY,windowWidth,windowHeight):
+                clickImageRandomly(IMAGE_STROY_INVITATION_CONFIRMED_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
+                while isImageDetected(IMAGE_STROY_INVITATION_CONFIRMED_PATH,startX,startY,windowWidth,windowHeight):
+                    clickImageRandomly(IMAGE_STROY_INVITATION_CONFIRMED_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
                 break
-            elif isImageDetected("./screenshots/Story/start.png",startX,startY,windowWidth,windowHeight):
-                clickImageRandomly("./screenshots/Story/start.png",1,0.15,startX,startY,windowWidth,windowHeight)
-                while isImageDetected("./screenshots/Story/start.png",startX,startY,windowWidth,windowHeight):
-                    clickImageRandomly("./screenshots/Story/start.png",1,0.15,startX,startY,windowWidth,windowHeight)
+            elif isImageDetected(IMAGE_STROY_START_PATH,startX,startY,windowWidth,windowHeight):
+                clickImageRandomly(IMAGE_STROY_START_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
+                while isImageDetected(IMAGE_STROY_START_PATH,startX,startY,windowWidth,windowHeight):
+                    clickImageRandomly(IMAGE_STROY_START_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
                 break
 
         time.sleep(5.0)
@@ -180,140 +215,142 @@ def gameTypeStory(startX,startY,windowWidth,windowHeight,isCaptain):
             xDirection=-1.0
             while detectCount:
                 detectCount-=1
-                if (isImageDetected("./screenshots/Story/fight.png",startX,startY,windowWidth-30,windowHeight)==False
-                       and isImageDetected("./screenshots/Story/fightBoss.png",startX,startY,windowWidth-30,windowHeight)==False):
+                if (isImageDetected(IMAGE_STROY_FIGHT_PATH,startX,startY,windowWidth-30,windowHeight)==False
+                       and isImageDetected(IMAGE_STROY_FIGHT_BOSS_PATH,startX,startY,windowWidth-30,windowHeight)==False):
                     resetMousePosition(startX,startY,windowWidth,windowHeight)
                     dragMouseRandomly(xDirection,random.uniform(0.01,0.1),windowWidth,windowHeight)
-                    printWithTime("账户:%s:第%s次检测:./screenshots/Story/fight.png"%(threading.current_thread().name,str(15-detectCount)))
-                    printWithTime("账户:%s:第%s次检测:./screenshots/Story/fightBoss.png"%(threading.current_thread().name,str(15-detectCount)))
+                    printWithTime("账户:%s:第%s次检测:%s"
+                                  %(threading.current_thread().name,str(15-detectCount),IMAGE_STROY_FIGHT_PATH))
+                    printWithTime("账户:%s:第%s次检测:%s"
+                                  %(threading.current_thread().name,str(15-detectCount),IMAGE_STROY_FIGHT_BOSS_PATH))
                 elif detectCount==0:
                     detectCount=15
                     xDirection=-xDirection
                 else:
                     break
                 
-            if isImageDetected("./screenshots/Story/fight.png",startX,startY,windowWidth,windowHeight):
-                clickImageRandomly("./screenshots/Story/fight.png",1,0.1,startX,startY,windowWidth,windowHeight)
-                while isImageDetected("./screenshots/Story/fight.png",startX,startY,windowWidth,windowHeight):
-                    clickImageRandomly("./screenshots/Story/fight.png",1,0.1,startX,startY,windowWidth,windowHeight)
-            elif isImageDetected("./screenshots/Story/fightBoss.png",startX,startY,windowWidth,windowHeight):
-                clickImageRandomly("./screenshots/Story/fightBoss.png",1,0.15,startX,startY,windowWidth,windowHeight)
-                while isImageDetected("./screenshots/Story/fightBoss.png",startX,startY,windowWidth,windowHeight):
-                    clickImageRandomly("./screenshots/Story/fightBoss.png",1,0.15,startX,startY,windowWidth,windowHeight)
+            if isImageDetected(IMAGE_STROY_FIGHT_PATH,startX,startY,windowWidth,windowHeight):
+                clickImageRandomly(IMAGE_STROY_FIGHT_PATH,1,0.1,startX,startY,windowWidth,windowHeight)
+                while isImageDetected(IMAGE_STROY_FIGHT_PATH,startX,startY,windowWidth,windowHeight):
+                    clickImageRandomly(IMAGE_STROY_FIGHT_PATH,1,0.1,startX,startY,windowWidth,windowHeight)
+            elif isImageDetected(IMAGE_STROY_FIGHT_BOSS_PATH,startX,startY,windowWidth,windowHeight):
+                clickImageRandomly(IMAGE_STROY_FIGHT_BOSS_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
+                while isImageDetected(IMAGE_STROY_FIGHT_BOSS_PATH,startX,startY,windowWidth,windowHeight):
+                    clickImageRandomly(IMAGE_STROY_FIGHT_BOSS_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
                 mainLocker.acquire()
                 isBossDetected=True
                 mainLocker.release()
 
             time.sleep(3.0)
             printWithTime("消息:账户:%s:等待结束界面1"%(threading.current_thread().name))
-            waitImageDetected("./screenshots/Story/finished1.png",startX,startY,windowWidth,windowHeight)
-            clickImageRandomly("./screenshots/Story/finished1.png",2,0.15,startX,startY,windowWidth,windowHeight)
-            while isImageDetected("./screenshots/Story/finished1.png",startX,startY,windowWidth,windowHeight):
-                clickImageRandomly("./screenshots/Story/finished1.png",1,0.15,startX,startY,windowWidth,windowHeight)
+            waitImageDetected(IMAGE_STROY_FINISHED1_PATH,startX,startY,windowWidth,windowHeight)
+            clickImageRandomly(IMAGE_STROY_FINISHED1_PATH,2,0.15,startX,startY,windowWidth,windowHeight)
+            while isImageDetected(IMAGE_STROY_FINISHED1_PATH,startX,startY,windowWidth,windowHeight):
+                clickImageRandomly(IMAGE_STROY_FINISHED1_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
             ##########
             time.sleep(0.4)
             printWithTime("消息:账户:%s:等待结束界面2"%(threading.current_thread().name))
-            waitImageDetected("./screenshots/Story/finished2.png",startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
-            clickImageRandomly("./screenshots/Story/finished2.png",2,0.15,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
-            while isImageDetected("./screenshots/Story/finished2.png",startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3)):
-                clickImageRandomly("./screenshots/Story/finished2.png",1,0.15,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
+            waitImageDetected(IMAGE_STROY_FINISHED2_PATH,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
+            clickImageRandomly(IMAGE_STROY_FINISHED2_PATH,2,0.15,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
+            while isImageDetected(IMAGE_STROY_FINISHED2_PATH,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3)):
+                clickImageRandomly(IMAGE_STROY_FINISHED2_PATH,1,0.15,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
 
             if isBossDetected:
                 break
         
     else:
         printWithTime("消息:账户:%s:等待开始"%(threading.current_thread().name))
-        waitImageDetected("./screenshots/Story/accept.png",startX,startY,windowWidth,windowHeight)
-        clickImageRandomly("./screenshots/Story/accept.png",1,0.15,startX,startY,windowWidth,windowHeight)
-        while isImageDetected("./screenshots/Story/accept.png",startX,startY,windowWidth,windowHeight):
-            clickImageRandomly("./screenshots/Story/accept.png",1,0.15,startX,startY,windowWidth,windowHeight)
+        waitImageDetected(IMAGE_STROY_ACCEPT_PATH,startX,startY,windowWidth,windowHeight)
+        clickImageRandomly(IMAGE_STROY_ACCEPT_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
+        while isImageDetected(IMAGE_STROY_ACCEPT_PATH,startX,startY,windowWidth,windowHeight):
+            clickImageRandomly(IMAGE_STROY_ACCEPT_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
             
         time.sleep(1.0)
         while True:
             time.sleep(3.0)
             printWithTime("消息:账户:%s:等待结束界面1"%(threading.current_thread().name))
-            waitImageDetected("./screenshots/Story/finished1.png",startX,startY,windowWidth,windowHeight)
-            clickImageRandomly("./screenshots/Story/finished1.png",1,0.15,startX,startY,windowWidth,windowHeight)
-            while isImageDetected("./screenshots/Story/finished1.png",startX,startY,windowWidth,windowHeight):
-                clickImageRandomly("./screenshots/Story/finished1.png",1,0.15,startX,startY,windowWidth,windowHeight)
+            waitImageDetected(IMAGE_STROY_FINISHED1_PATH,startX,startY,windowWidth,windowHeight)
+            clickImageRandomly(IMAGE_STROY_FINISHED1_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
+            while isImageDetected(IMAGE_STROY_FINISHED1_PATH,startX,startY,windowWidth,windowHeight):
+                clickImageRandomly(IMAGE_STROY_FINISHED1_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
             ##########
             time.sleep(0.5)
             printWithTime("消息:账户:%s:等待结束界面2"%(threading.current_thread().name))
-            waitImageDetected("./screenshots/Story/finished2.png",startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
-            clickImageRandomly("./screenshots/Story/finished2.png",2,0.15,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
-            while isImageDetected("./screenshots/Story/finished2.png",startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3)):
-                clickImageRandomly("./screenshots/Story/finished2.png",1,0.15,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
+            waitImageDetected(IMAGE_STROY_FINISHED2_PATH,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
+            clickImageRandomly(IMAGE_STROY_FINISHED2_PATH,2,0.15,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
+            while isImageDetected(IMAGE_STROY_FINISHED2_PATH,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3)):
+                clickImageRandomly(IMAGE_STROY_FINISHED2_PATH,1,0.15,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
 
             if isBossDetected:
                 break
-    #waitImageDetected("./screenshots/Story/getReward.png",startX,startY,windowWidth,windowHeight)
+    #waitImageDetected(IMAGE_STROY_GET_REWARD_PATH,startX,startY,windowWidth,windowHeight)
     '''不稳定'''
-    waitImageDetected("./screenshots/Story/back.png",startX,startY,windowWidth,windowHeight)
+    waitImageDetected(IMAGE_STROY_BACK_PATH,startX,startY,windowWidth,windowHeight)
     
-    while isImageDetected("./screenshots/Story/back.png",startX,startY,windowWidth,windowHeight):
-        while isImageDetected("./screenshots/Story/getReward.png",startX,startY,windowWidth,windowHeight):
-            clickImageRandomly("./screenshots/Story/getReward.png",1,0.15,startX,startY,windowWidth,windowHeight)
-            while (isImageDetected("./screenshots/Story/getReward.png",startX,startY,windowWidth,windowHeight)
-                   and isImageDetected("./screenshots/Story/rewardConfirmed.png",startX,startY,windowWidth,windowHeight)==False):
-                clickImageRandomly("./screenshots/Story/getReward.png",1,0.15,startX+30,startY,windowWidth,windowHeight)
-            waitImageDetected("./screenshots/Story/rewardConfirmed.png",startX,startY,windowWidth,windowHeight)
+    while isImageDetected(IMAGE_STROY_BACK_PATH,startX,startY,windowWidth,windowHeight):
+        while isImageDetected(IMAGE_STROY_GET_REWARD_PATH,startX,startY,windowWidth,windowHeight):
+            clickImageRandomly(IMAGE_STROY_GET_REWARD_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
+            while (isImageDetected(IMAGE_STROY_GET_REWARD_PATH,startX,startY,windowWidth,windowHeight)
+                   and isImageDetected(IMAGE_STROY_REWARD_CONFIRMED_PATH,startX,startY,windowWidth,windowHeight)==False):
+                clickImageRandomly(IMAGE_STROY_GET_REWARD_PATH,1,0.15,startX+30,startY,windowWidth,windowHeight)
+            waitImageDetected(IMAGE_STROY_REWARD_CONFIRMED_PATH,startX,startY,windowWidth,windowHeight)
             clickMouseRandomly(startX,startY,windowWidth/4,windowHeight/8)
-            while isImageDetected("./screenshots/Story/rewardConfirmed.png",startX,startY,windowWidth,windowHeight):
+            while isImageDetected(IMAGE_STROY_REWARD_CONFIRMED_PATH,startX,startY,windowWidth,windowHeight):
                 clickMouseRandomly(startX+30,startY,windowWidth/4,windowHeight/8)
     
     #winsound.Beep(800,1000)
 
 def gameTypeMitamaX(startX,startY,windowWidth,windowHeight,isCaptain):
     printWithTime("消息:账户:%s:等待开始"%(threading.current_thread().name))
-    waitImageDetected("./screenshots/MitamaX/start.png",startX,startY,windowWidth,windowHeight)
-    clickImageRandomly("./screenshots/MitamaX/start.png",1,0.15,startX,startY,windowWidth,windowHeight)
-    while isImageDetected("./screenshots/MitamaX/start.png",startX,startY,windowWidth,windowHeight):
-        clickImageRandomly("./screenshots/MitamaX/start.png",1,0.15,startX,startY,windowWidth,windowHeight)
+    waitImageDetected(IMAGE_MITAMA_X_START_PATH,startX,startY,windowWidth,windowHeight)
+    clickImageRandomly(IMAGE_MITAMA_X_START_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
+    while isImageDetected(IMAGE_MITAMA_X_START_PATH,startX,startY,windowWidth,windowHeight):
+        clickImageRandomly(IMAGE_MITAMA_X_START_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
     ##########
     printWithTime("消息:账户:%s:等待结束界面1"%(threading.current_thread().name))
-    waitImageDetected("./screenshots/MitamaX/finished1.png",startX,startY,windowWidth,windowHeight)
-    clickImageRandomly("./screenshots/MitamaX/finished1.png",2,0.15,startX,startY,windowWidth,windowHeight)
-    while isImageDetected("./screenshots/MitamaX/finished1.png",startX,startY,windowWidth,windowHeight):
-        clickImageRandomly("./screenshots/MitamaX/finished1.png",1,0.15,startX,startY,windowWidth,windowHeight)
+    waitImageDetected(IMAGE_MITAMA_X_FINISHED1_PATH,startX,startY,windowWidth,windowHeight)
+    clickImageRandomly(IMAGE_MITAMA_X_FINISHED1_PATH,2,0.15,startX,startY,windowWidth,windowHeight)
+    while isImageDetected(IMAGE_MITAMA_X_FINISHED1_PATH,startX,startY,windowWidth,windowHeight):
+        clickImageRandomly(IMAGE_MITAMA_X_FINISHED1_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
     ##########
     time.sleep(0.5)
     printWithTime("消息:账户:%s:等待结束界面2"%(threading.current_thread().name))
-    waitImageDetected("./screenshots/MitamaX/finished2.png",startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
-    clickImageRandomly("./screenshots/MitamaX/finished2.png",2,0.15,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
-    while isImageDetected("./screenshots/MitamaX/finished2.png",startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3)):
-        clickImageRandomly("./screenshots/MitamaX/finished2.png",1,0.15,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
+    waitImageDetected(IMAGE_MITAMA_X_FINISHED2_PATH,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
+    clickImageRandomly(IMAGE_MITAMA_X_FINISHED2_PATH,2,0.15,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
+    while isImageDetected(IMAGE_MITAMA_X_FINISHED2_PATH,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3)):
+        clickImageRandomly(IMAGE_MITAMA_X_FINISHED2_PATH,1,0.15,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
 
 def gameTypeBreach(startX,startY,windowWidth,windowHeight,isCaptain):
     printWithTime("消息:账户:%s:等待开始"%(threading.current_thread().name))
-    waitImageDetected("./screenshots/Breach/section.png",startX,startY,windowWidth,windowHeight)
-    clickImageRandomly("./screenshots/Breach/section.png",1,0.15,startX,startY,windowWidth,windowHeight)
-    while (isImageDetected("./screenshots/Breach/section.png",startX,startY,windowWidth,windowHeight)
-           and isImageDetected("./screenshots/Breach/start.png",startX,startY,windowWidth,windowHeight)==False):
-        clickImageRandomly("./screenshots/Breach/section.png",1,0.15,startX,startY,windowWidth,windowHeight)
+    waitImageDetected(IMAGE_BREACH_SECTION_PATH,startX,startY,windowWidth,windowHeight)
+    clickImageRandomly(IMAGE_BREACH_SECTION_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
+    while (isImageDetected(IMAGE_BREACH_SECTION_PATH,startX,startY,windowWidth,windowHeight)
+           and isImageDetected(IMAGE_BREACH_START_PATH,startX,startY,windowWidth,windowHeight)==False):
+        clickImageRandomly(IMAGE_BREACH_SECTION_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
 
-    waitImageDetected("./screenshots/Breach/start.png",startX,startY,windowWidth,windowHeight)
-    clickImageRandomly("./screenshots/Breach/start.png",1,0.15,startX,startY,windowWidth,windowHeight)
-    while isImageDetected("./screenshots/Breach/start.png",startX,startY,windowWidth,windowHeight):
-        clickImageRandomly("./screenshots/Breach/start.png",1,0.15,startX,startY,windowWidth,windowHeight)
+    waitImageDetected(IMAGE_BREACH_START_PATH,startX,startY,windowWidth,windowHeight)
+    clickImageRandomly(IMAGE_BREACH_START_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
+    while isImageDetected(IMAGE_BREACH_START_PATH,startX,startY,windowWidth,windowHeight):
+        clickImageRandomly(IMAGE_BREACH_START_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
     ##########
-    if pathlib.Path("./screenshots/Breach/shikigamiSelected.png").exists():
+    if pathlib.Path(IMAGE_BREACH_SHIKIGAMI_SELECTED_PATH).exists():
         printWithTime("账户:%s:检测到被选式神"%(threading.current_thread().name))
-        while (isImageDetected("./screenshots/Breach/selectionMark.png",startX,startY,windowWidth,windowHeight)==False
-               and isImageDetected("./screenshots/Breach/finished1.png",startX,startY,windowWidth,windowHeight)==False):
-            clickImageRandomly("./screenshots/Breach/shikigamiSelected.png",1,0.25,startX,startY,windowWidth,windowHeight)
+        while (isImageDetected(IMAGE_BREACH_SELECTION_MARK_PATH,startX,startY,windowWidth,windowHeight)==False
+               and isImageDetected(IMAGE_BREACH_FINISHED1_PATH,startX,startY,windowWidth,windowHeight)==False):
+            clickImageRandomly(IMAGE_BREACH_SHIKIGAMI_SELECTED_PATH,1,0.25,startX,startY,windowWidth,windowHeight)
     ##########
     printWithTime("消息:账户:%s:等待结束界面1"%(threading.current_thread().name))
-    waitImageDetected("./screenshots/Breach/finished1.png",startX,startY,windowWidth,windowHeight)
-    clickImageRandomly("./screenshots/Breach/finished1.png",2,0.15,startX,startY,windowWidth,windowHeight)
-    while isImageDetected("./screenshots/Breach/finished1.png",startX,startY,windowWidth,windowHeight):
-        clickImageRandomly("./screenshots/Breach/finished1.png",1,0.15,startX,startY,windowWidth,windowHeight)
+    waitImageDetected(IMAGE_BREACH_FINISHED1_PATH,startX,startY,windowWidth,windowHeight)
+    clickImageRandomly(IMAGE_BREACH_FINISHED1_PATH,2,0.15,startX,startY,windowWidth,windowHeight)
+    while isImageDetected(IMAGE_BREACH_FINISHED1_PATH,startX,startY,windowWidth,windowHeight):
+        clickImageRandomly(IMAGE_BREACH_FINISHED1_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
     ##########
     time.sleep(0.5)
     printWithTime("消息:账户:%s:等待结束界面2"%(threading.current_thread().name))
-    waitImageDetected("./screenshots/Breach/finished2.png",startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
-    clickImageRandomly("./screenshots/Breach/finished2.png",2,0.15,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
-    while isImageDetected("./screenshots/Breach/finished2.png",startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3)):
-        clickImageRandomly("./screenshots/Breach/finished2.png",1,0.15,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
+    waitImageDetected(IMAGE_BREACH_FINISHED2_PATH,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
+    clickImageRandomly(IMAGE_BREACH_FINISHED2_PATH,2,0.15,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
+    while isImageDetected(IMAGE_BREACH_FINISHED2_PATH,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3)):
+        clickImageRandomly(IMAGE_BREACH_FINISHED2_PATH,1,0.15,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
 
 def account(number,gameType,limit,startX,startY,windowWidth,windowHeight,isCaptain,feedbackerName):
     threads=[];
@@ -371,14 +408,14 @@ def account(number,gameType,limit,startX,startY,windowWidth,windowHeight,isCapta
     message="%s:账户:%s:游戏类型:%s,已完成"%(getTimeFormatted(),threading.current_thread().name,str(gameType))
     threading.Thread(None,feedbacker,"account:"+str(number),args=(threading.current_thread().name,feedbackerName,message)).start()
     winsound.Beep(1200,10000)
-    #os.system("taskkill /IM onmyoji.exe /F")
+    os.system("taskkill /IM onmyoji.exe /F")
 
 def detectFailure(accountThread,startX,startY,windowWidth,windowHeight):
     global lastOperationTime
     
-    waitImageDetected("./screenshots/failed.png",startX,startY,windowWidth,windowHeight)
+    waitImageDetected(IMAGE_FAILED_PATH,startX,startY,windowWidth,windowHeight)
     message="账户:%s:失败，请重新运行!"%(accountThread.name)
-    gui.screenshot("./screenshots/screenImg.png")
+    gui.screenshot(IMAGE_SCREENSHOT_PATH)
     printWithTime(message)
     def inner():
         mainLocker.acquire()
@@ -395,7 +432,7 @@ def detectDisconnection(accountThread,startX,startY,windowWidth,windowHeight):
     global lastOperationTime
 
     while (True):
-        waitImageDetected("./screenshots/connecting.png",startX,startY,windowWidth,windowHeight)
+        waitImageDetected(IMAGE_CONNECTING_PATH,startX,startY,windowWidth,windowHeight)
         message="账户:%s:正在重新连接。。。。。。"%(accountThread.name)
         printWithTime(message)
         winsound.Beep(1000,10000)
@@ -416,19 +453,19 @@ def detectInterception(startX,startY,windowWidth,windowHeight):
 
 def detectAssistance(startX,startY,windowWidth,windowHeight):
     while (True):
-        waitImageDetected("./screenshots/assistance.png",startX,startY,windowWidth,windowHeight)
+        waitImageDetected(IMAGE_ASSISTANCE_PATH,startX,startY,windowWidth,windowHeight)
         printWithTime("账户:%s:检测到悬赏封印邀请"%(threading.current_thread().name))
         winsound.Beep(1000,500)
-        waitImageDetected("./screenshots/accept.png",startX,startY,windowWidth,windowHeight)
-        clickImageRandomly("./screenshots/accept.png",2,0.15,startX,startY,windowWidth,windowHeight)
-        while isImageDetected("./screenshots/accept.png",startX,startY,windowWidth,windowHeight):
-            clickImageRandomly("./screenshots/accept.png",1,0.1,startX,startY,windowWidth,windowHeight)
+        waitImageDetected(IMAGE_ACCEPT_PATH,startX,startY,windowWidth,windowHeight)
+        clickImageRandomly(IMAGE_ACCEPT_PATH,2,0.15,startX,startY,windowWidth,windowHeight)
+        while isImageDetected(IMAGE_ACCEPT_PATH,startX,startY,windowWidth,windowHeight):
+            clickImageRandomly(IMAGE_ACCEPT_PATH,1,0.1,startX,startY,windowWidth,windowHeight)
         printWithTime("账户:%s:已尝试接受悬赏封印邀请"%(threading.current_thread().name))
 
 def detectOccupation():
     global lastOperationTime
     
-    waitImageDetected("./screenshots/occupied.png",0,0,screenWidth,screenHeight)
+    waitImageDetected(IMAGE_OCCUPIED_PATH,0,0,screenWidth,screenHeight)
     message="错误:检测到账户在其他设备登录!"
     printWithTime(message)
     def inner():
