@@ -1,6 +1,6 @@
 '''
 Project:FK-Onmyoji
-Version:Beta 1.0.1
+Version:Beta 1.1.0
 
 Powered By BluePlum Studio:lzycc234
 https://github.com/BluePlumStudio/FK-Onmyoji
@@ -21,6 +21,15 @@ import pathlib
 import win32gui
 import win32con
 import win32clipboard
+import configparser
+
+class newConfigparser(configparser.ConfigParser):
+    
+    def __init__(self,defaults=None):
+        configparser.ConfigParser.__init__(self,defaults=None)
+        
+    def optionxform(self, optionstr):
+        return optionstr
 
 screenWidth,screenHeight=gui.size()
 gui.PAUSE=0.0
@@ -29,6 +38,15 @@ mainLocker=threading.Lock()
 feedbackerLocker=threading.Lock()
 lastOperationTime=time.time()
 isBossDetected=False
+
+CONFIG_PATH="./config.ini"
+
+optionExitAfterFinish=False
+optionCloseGamesAfterFinish=False
+optionExitAfterFailure=False
+optionCloseGamesAfterFailure=True
+optionExitIfOccupied=False
+optionCloseGamesIfOccupied=True
 
 IMAGE_FAILED_PATH="./screenshots/failed.png"
 IMAGE_SCREENSHOT_PATH="./screenshots/screenshot.png"
@@ -408,7 +426,12 @@ def account(number,gameType,limit,startX,startY,windowWidth,windowHeight,isCapta
     message="%s:账户:%s:游戏类型:%s,已完成"%(getTimeFormatted(),threading.current_thread().name,str(gameType))
     threading.Thread(None,feedbacker,"account:"+str(number),args=(threading.current_thread().name,feedbackerName,message)).start()
     winsound.Beep(1200,10000)
-    os.system("taskkill /IM onmyoji.exe /F")
+
+    if optionCloseGamesAfterFinish:
+        os.system("taskkill /IM onmyoji.exe /F")
+    
+    if optionExitAfterFinish:
+        sys.exit()
 
 def detectFailure(accountThread,startX,startY,windowWidth,windowHeight):
     global lastOperationTime
@@ -422,7 +445,10 @@ def detectFailure(accountThread,startX,startY,windowWidth,windowHeight):
         lastOperationTime=time.time()
         mainLocker.release()
         winsound.Beep(800,60000)
-        os.system("taskkill /IM onmyoji.exe /F")
+        
+        if optionCloseGamesAfterFailure:
+            os.system("taskkill /IM onmyoji.exe /F")
+        
         winsound.Beep(800,10000)
     threading.Thread(None,inner,"account:"+str(accountThread.name)).start()
     mainLocker.acquire()
@@ -473,7 +499,10 @@ def detectOccupation():
         lastOperationTime=time.time()
         mainLocker.release()
         winsound.Beep(1000,30000)
-        os.system("taskkill /IM onmyoji.exe /F")
+        
+        if optionCloseGamesIfOccupied:
+            os.system("taskkill /IM onmyoji.exe /F")
+            
         winsound.Beep(1000,10000)
     threading.Thread(None,inner).start()
     mainLocker.acquire()
@@ -514,10 +543,48 @@ def feedbacker(accountName,feedbackerName,message):
     win32gui.SendMessage(qqWindow, win32con.WM_KEYUP, win32con.VK_RETURN, 0)
     feedbackerLocker.release()
 
+def init():
+    global optionExitAfterFinish
+    global optionCloseGamesAfterFinish
+    
+    printWithTime("消息:初始化中。。。")
+    configPraser=newConfigparser()
+    
+    if (pathlib.Path(CONFIG_PATH).exists())==False:
+        printWithTime("消息:已新建配置文件")
+        configPraser["Options"]={"ExitAfterfinish":"False",
+                                 "CloseGamesAfterFinish":"False",
+                                 "ExitAfterFailure":"False",
+                                 "CloseGamesAfterFailure":"True",
+                                 "ExitIfOccupied":"False",
+                                 "CloseGamesIfOccupied":"True"}
+        
+        with open(CONFIG_PATH, 'w') as configFile:
+            configPraser.write(configFile)
+
+        return
+            
+    configPraser.read(CONFIG_PATH)
+    if configPraser.has_section("Options"):
+        options=configPraser["Options"]
+        if configPraser.has_option("Options","ExitAfterfinish"):
+            optionExitAfterFinish=options.getboolean("ExitAfterfinish")
+        if configPraser.has_option("Options","CloseGamesAfterFinish"):
+            optionCloseGamesAfterFinish=options.getboolean("CloseGamesAfterFinish")
+        if configPraser.has_option("Options","ExitAfterFailure"):
+            optionExitAfterFailure=options.getboolean("ExitAfterFailure")
+        if configPraser.has_option("Options","CloseGamesAfterFailure"):
+            optionCloseGamesAfterFailure=options.getboolean("CloseGamesAfterFailure")
+        if configPraser.has_option("Options","ExitIfOccupied"):
+            optionExitIfOccupied=options.getboolean("ExitIfOccupied")
+        if configPraser.has_option("Options","CloseGamesIfOccupied"):
+            optionCloseGamesIfOccupied=options.getboolean("CloseGamesIfOccupied")
+
+    printWithTime("消息:已读取配置文件")
 def main():
     winsound.Beep(500,100)
+    init()
     printWithTime("警告:请务必使用'管理员权限'运行!")
-    threading.Thread(None,detectPause).start()
     accountCount=int(inputWithTimePrompt("账户数:"))
     threads=[];
     while accountCount:
@@ -545,6 +612,7 @@ def main():
     for thread in threads:
         thread.start()
     threading.Thread(None,detectOccupation).start()
+    threading.Thread(None,detectPause).start()
 ##########
     #os.system("pause")
 
