@@ -61,14 +61,12 @@
  4. 挂机（按P**暂停/继续**）。
  
 # 配置文件说明
-	`
-	ExitAfterfinish = False				（完成所有游戏类型后退出程序）
-	CloseGamesAfterFinish = False		（完成所有游戏类型后关闭所有游戏）
-	ExitAfterFailure = False			（失败后退出程序，不可用）
-	CloseGamesAfterFailure = True		（失败后关闭所有游戏）
-	ExitIfOccupied = False				（检测到账户在其他设备登录后退出程序，不可用）
-	CloseGamesIfOccupied = True			（检测到账户在其他设备登录后关闭所有游戏）
-	`
+	ExitAfterfinish = False          （完成所有游戏类型后退出程序）
+	CloseGamesAfterFinish = False    （完成所有游戏类型后关闭所有游戏）
+	ExitAfterFailure = False         （失败后退出程序，不可用）
+	CloseGamesAfterFailure = True    （失败后关闭所有游戏）
+	ExitIfOccupied = False           （检测到账户在其他设备登录后退出程序，不可用）
+	CloseGamesIfOccupied = True      （检测到账户在其他设备登录后关闭所有游戏）
 	
 # 相关问题 & 注意事项
  1. **注意**：以下情况**蜂鸣器**会发出**警报声**（加*的建议进行人工操作）：
