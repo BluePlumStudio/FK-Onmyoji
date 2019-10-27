@@ -192,6 +192,16 @@
     
 	-打开配置文件**config.ini**进行配置
 
+ 5. **问题**：如何设定被更换的狗粮？
+
+    -在战斗准备时截取式神**稀有度**选项卡图片，将截图替换**"./screenshots/Story/selectedLevel.png"**
+
+    ![样例4][6]
+
+    -在战斗准备时截取式神选项卡图片，将截图替换**"./screenshots/Story/shikigamiSelected.png"**
+    
+    ![样例5][7]
+
 # 关于
 
 学了一天Python来**练手**的。
@@ -202,3 +212,5 @@
   [3]: https://github.com/BluePlumStudio/FK-Onmyoji/blob/master/sample.png
   [4]: https://github.com/BluePlumStudio/FK-Onmyoji/blob/master/sample2.png
   [5]: https://github.com/BluePlumStudio/FK-Onmyoji/blob/master/sample3.png
+  [6]: https://github.com/BluePlumStudio/FK-Onmyoji/blob/master/screenshots/Story/selectedLevel.png
+  [7]: https://github.com/BluePlumStudio/FK-Onmyoji/blob/master/screenshots/Story/shikigamiSelected.png
