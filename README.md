@@ -162,9 +162,9 @@
 
 	ExitIfFoodNotEnough = False      （检测到体力不足后退出程序）
 
-   CloseGamesIfFoodNotEnough = True  （检测到体力不足后关闭游戏）
+    CloseGamesIfFoodNotEnough = True  （检测到体力不足后关闭游戏）
 
-   ReplaceIfShikigamiFull = True     （检测到式神经验已满后更换式神）
+    ReplaceIfShikigamiFull = True     （检测到式神经验已满后更换式神）
 
 # 相关问题 & 注意事项
 
