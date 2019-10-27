@@ -194,11 +194,11 @@
 
  5. **问题**：如何设定被更换的狗粮？
 
-    -在战斗准备时截取式神**稀有度**选项卡图片，将截图替换**"./screenshots/Story/selectedLevel.png"**
+    -在战斗准备时截取式神**稀有度**选项卡图片，将截图替换"./screenshots/Story/selectedLevel.png"
 
     ![样例4][6]
 
-    -在战斗准备时截取式神选项卡图片，将截图替换**"./screenshots/Story/shikigamiSelected.png"**
+    -在战斗准备时截取式神选项卡图片，将截图替换"./screenshots/Story/shikigamiSelected.png"
     
     ![样例5][7]
 
