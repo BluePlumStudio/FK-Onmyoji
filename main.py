@@ -1,6 +1,6 @@
 '''
 Project:FK-Onmyoji
-Version:Beta 1.1.0
+Version:Beta 1.3.0
 
 Powered By BluePlum Studio:lzycc234
 https://github.com/BluePlumStudio/FK-Onmyoji
@@ -876,7 +876,7 @@ def main():
     while accountCount:
         accountCount-=1
 
-        gameType=int(inputWithTimePrompt("游戏类型(1.御魂/觉醒 2.章节探索 3.业原火 4.结界突破 5.道馆 6.活动-修罗战场:"))
+        gameType=int(inputWithTimePrompt("游戏类型(1.多人御魂/觉醒 2.章节探索 3.单人御魂/业原火/御灵 4.结界突破 5.道馆 6.活动-修罗战场:"))
         limit=int(inputWithTimePrompt("局数:"))
         startX=int(inputWithTimePrompt("窗口起始位置X:"))
         startY=int(inputWithTimePrompt("窗口起始位置Y:"))
