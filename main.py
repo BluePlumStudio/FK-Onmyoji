@@ -324,9 +324,9 @@ def gameTypeStory(startX,startY,windowWidth,windowHeight,isCaptain):
                                   %(threading.current_thread().name,str(15-detectCount),IMAGE_STROY_FIGHT_PATH))
                     printWithTime("账户:%s:第%s次检测:%s"
                                   %(threading.current_thread().name,str(15-detectCount),IMAGE_STROY_FIGHT_BOSS_PATH))
-                elif detectCount==0:
-                    detectCount=15
-                    xDirection=-xDirection
+                    if detectCount==0:
+                        detectCount=15
+                        xDirection=-xDirection
                 else:
                     break
                 
@@ -748,39 +748,40 @@ def detectOccupation():
         winsound.Beep(1000,10000)
     threading.Thread(None,inner).start()
     mainLocker.acquire()
-    gui.alert(message,"错误",button="确定")
+    #gui.alert(message,"错误",button="确定")
 
 def detectFoodInsufficiency(startX,startY,windowWidth,windowHeight):
     global lastOperationTime
 
-    waitImageDetected(IMAGE_FOOD_INSUFFICIENCY_PATH,startX,startY,screenWidth,screenHeight,interval=5.0)
+    while True:
+        waitImageDetected(IMAGE_FOOD_INSUFFICIENCY_PATH,startX,startY,screenWidth,screenHeight,interval=5.0)
 
-    message="错误:账户:%s:检测到体力不足"%(threading.current_thread().name)
-    printWithTime(message)
-    def inner():
-        mainLocker.acquire()
-        lastOperationTime=time.time()
-        mainLocker.release()
-        winsound.Beep(1000,30000)
-        
-        if optionCloseGamesIfFoodNotEnough:
-            os.system("taskkill /IM onmyoji.exe /F")
+        message="错误:账户:%s:检测到体力不足"%(threading.current_thread().name)
+        printWithTime(message)
+        def inner():
+            mainLocker.acquire()
+            lastOperationTime=time.time()
+            mainLocker.release()
+            winsound.Beep(1000,30000)
             
-        winsound.Beep(1000,10000)
-        
-    waitImageDetected(IMAGE_CLOSE_DIALOG_PATH,startX,startY,windowWidth,windowHeight)
-    clickImageWithOffsets(IMAGE_CLOSE_DIALOG_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
-    while isImageDetected(IMAGE_CLOSE_DIALOG_PATH,startX,startY,windowWidth,windowHeight):
-        clickImageWithOffsets(IMAGE_CLOSE_DIALOG_PATH,1,0.1,startX,startY,windowWidth,windowHeight)
-        
-    threading.Thread(None,inner).start()
-    mainLocker.acquire()
-    gui.alert(message,"错误",button="确定")
+            if optionCloseGamesIfFoodNotEnough:
+                os.system("taskkill /IM onmyoji.exe /F")
+                
+            winsound.Beep(1000,10000)
+            
+        waitImageDetected(IMAGE_CLOSE_DIALOG_PATH,startX,startY,windowWidth,windowHeight)
+        clickImageWithOffsets(IMAGE_CLOSE_DIALOG_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
+        while isImageDetected(IMAGE_CLOSE_DIALOG_PATH,startX,startY,windowWidth,windowHeight):
+            clickImageWithOffsets(IMAGE_CLOSE_DIALOG_PATH,1,0.1,startX,startY,windowWidth,windowHeight)
+            
+        threading.Thread(None,inner).start()
+        mainLocker.acquire()
+        #gui.alert(message,"错误",button="确定")
 
 def detectPause():
     isPaused=False
     while (True):
-        keyboard.wait('p')
+        keyboard.wait(hotkey='f12')
         if isPaused==False:
             printWithTime("警告:脚本已暂停!")
             isPaused=True
@@ -803,11 +804,9 @@ def feedbacker(accountName,feedbackerName,message):
     win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, message)
     win32clipboard.CloseClipboard()
 
-    qqWindow = win32gui.FindWindow(None, feedbackerName)
-
     win32gui.SendMessage(qqWindow, 258, 22, 2080193)
     win32gui.SendMessage(qqWindow, 770, 0, 0)
-
+    
     win32gui.SendMessage(qqWindow, win32con.WM_KEYDOWN, win32con.VK_RETURN, 0)
     win32gui.SendMessage(qqWindow, win32con.WM_KEYUP, win32con.VK_RETURN, 0)
     feedbackerLocker.release()

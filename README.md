@@ -18,7 +18,7 @@
 
  - QQ消息反馈
 
- - 跟进最新活动副本
+ - 跟进**最新活动副本**
 
 
  
@@ -81,7 +81,7 @@
 
 ![样例][3]
 
- 4. 挂机（按P**暂停/继续**）。
+ 4. 挂机（按F12**暂停/继续**）。
  
 # 详细使用
 
@@ -162,9 +162,9 @@
 
 	ExitIfFoodNotEnough = False      （检测到体力不足后退出程序）
 
-    CloseGamesIfFoodNotEnough = True  （检测到体力不足后关闭游戏）
+    CloseGamesIfFoodNotEnough = True （检测到体力不足后关闭游戏）
 
-    ReplaceIfShikigamiFull = True     （检测到式神经验已满后更换式神）
+    ReplaceIfShikigamiFull = True    （检测到式神经验已满后更换式神）
 
 # 相关问题 & 注意事项
 
