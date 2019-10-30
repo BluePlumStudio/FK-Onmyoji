@@ -96,19 +96,6 @@ IMAGE_BREACH_FINISHED2_PATH="./screenshots/Breach/finished2.png"
 IMAGE_BREACH_SHIKIGAMI_SELECTED_PATH="./screenshots/Breach/shikigamiSelected.png"
 IMAGE_BREACH_SELECTION_MARK_PATH="./screenshots/Breach/selectionMark.png"
 
-IMAGE_ACTIVITY_GENIE_LEVEL3_1_PATH="./screenshots/Activity/Genie/level3_1.png"
-IMAGE_ACTIVITY_GENIE_LEVEL3_2_PATH="./screenshots/Activity/Genie/level3_2.png"
-IMAGE_ACTIVITY_GENIE_START_PATH="./screenshots/Activity/Genie/start.png"
-IMAGE_ACTIVITY_GENIE_READY_PATH="./screenshots/Activity/Genie/ready.png"
-IMAGE_ACTIVITY_GENIE_FINISHED1_PATH="./screenshots/Activity/Genie/finished1.png"
-IMAGE_ACTIVITY_GENIE_FINISHED2_PATH="./screenshots/Activity/Genie/finished2.png"
-
-IMAGE_ACTIVITY_LEGION_FIGHT_MARK_PATH="./screenshots/Activity/Legion/fightMark.png"
-IMAGE_ACTIVITY_LEGION_START_PATH="./screenshots/Activity/Legion/start.png"
-IMAGE_ACTIVITY_LEGION_READY_PATH="./screenshots/Activity/Legion/ready.png"
-IMAGE_ACTIVITY_LEGION_FINISHED1_PATH="./screenshots/Activity/Legion/finished1.png"
-IMAGE_ACTIVITY_LEGION_FINISHED2_PATH="./screenshots/Activity/Legion/finished2.png"
-
 IMAGE_CLUB_BREACH_READY_PATH="./screenshots/ClubBreach/ready.png"
 IMAGE_CLUB_BREACH_FINISHED2_PATH="./screenshots/ClubBreach/finished2.png"
 
@@ -529,71 +516,6 @@ def gameTypeBreach(startX,startY,windowWidth,windowHeight,isCaptain):
     while isImageDetected(IMAGE_BREACH_FINISHED2_PATH,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3)):
         clickImageWithOffsets(IMAGE_BREACH_FINISHED2_PATH,1,0.15,startX,int(startY+windowHeight*2/3),windowWidth,int(windowHeight/3))
 
-def gameTypeActivityGenie(startX,startY,windowWidth,windowHeight,isCaptain):
-    printWithTime("消息:账户:%s:等待开始"%(threading.current_thread().name))
-    '''
-    seconds=round(1800+random.uniform(-1,1)*100,0)
-    while seconds:
-        printWithTime("消息:%s 秒后开始"%(str(seconds)))
-        time.sleep(1)
-        seconds-=1.0
-    '''
-    time.sleep(3)
-
-    waitImageDetected(IMAGE_ACTIVITY_GENIE_START_PATH,startX,startY,windowWidth,windowHeight)
-    clickImageWithOffsets(IMAGE_ACTIVITY_GENIE_START_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
-    while isImageDetected(IMAGE_ACTIVITY_GENIE_START_PATH,startX,startY,windowWidth,windowHeight):
-        clickImageWithOffsets(IMAGE_ACTIVITY_GENIE_START_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
-    
-    time.sleep(5)
-    waitImageDetected(IMAGE_ACTIVITY_GENIE_READY_PATH,startX,startY,windowWidth,windowHeight)
-    clickImageWithOffsets(IMAGE_ACTIVITY_GENIE_READY_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
-    while isImageDetected(IMAGE_ACTIVITY_GENIE_READY_PATH,startX,startY,windowWidth,windowHeight):
-        clickImageWithOffsets(IMAGE_ACTIVITY_GENIE_READY_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
-    
-    waitImageDetected(IMAGE_ACTIVITY_GENIE_FINISHED1_PATH,startX,startY,windowWidth,windowHeight)
-    clickImageWithOffsets(IMAGE_ACTIVITY_GENIE_FINISHED1_PATH,2,0.15,startX,startY,windowWidth,windowHeight)
-    while isImageDetected(IMAGE_ACTIVITY_GENIE_FINISHED1_PATH,startX,startY,windowWidth,windowHeight):
-        clickImageWithOffsets(IMAGE_ACTIVITY_GENIE_FINISHED1_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
-
-    time.sleep(0.5)
-    waitImageDetected(IMAGE_ACTIVITY_GENIE_FINISHED2_PATH,startX,startY,windowWidth,windowHeight)
-    clickImageWithOffsets(IMAGE_ACTIVITY_GENIE_FINISHED2_PATH,2,0.15,startX,startY,windowWidth,windowHeight)
-    while isImageDetected(IMAGE_ACTIVITY_GENIE_FINISHED2_PATH,startX,startY,windowWidth,windowHeight):
-        clickImageWithOffsets(IMAGE_ACTIVITY_GENIE_FINISHED2_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
-
-def gameTypeActivityLegion(startX,startY,windowWidth,windowHeight,isCaptain):
-    printWithTime("消息:账户:%s:等待开始"%(threading.current_thread().name))
-
-    waitImageDetected(IMAGE_ACTIVITY_LEGION_FIGHT_MARK_PATH,startX,startY,windowWidth,windowHeight)
-    position=getImagePosition(IMAGE_ACTIVITY_LEGION_FIGHT_MARK_PATH,startX,startY,windowWidth,windowHeight)
-    clickMouse(position.left+(7+random.uniform(0.1,1.0))*position.width,position.top+random.uniform(0.1,1.0)*position.height)
-    while (isImageDetected(IMAGE_ACTIVITY_LEGION_FIGHT_MARK_PATH,startX,startY,windowWidth,windowHeight)
-            and isImageDetected(IMAGE_ACTIVITY_LEGION_START_PATH,startX,startY,windowWidth,windowHeight)==False):
-        position=getImagePosition(IMAGE_ACTIVITY_LEGION_FIGHT_MARK_PATH,startX,startY,windowWidth,windowHeight)
-        clickMouse(position.left+(7+random.uniform(0.1,1.0))*position.width,position.top+random.uniform(0.1,1.0)*position.height)
-        
-
-    waitImageDetected(IMAGE_ACTIVITY_LEGION_START_PATH,startX,startY,windowWidth,windowHeight)
-    clickImageWithOffsets(IMAGE_ACTIVITY_LEGION_START_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
-    while isImageDetected(IMAGE_ACTIVITY_LEGION_START_PATH,startX,startY,windowWidth,windowHeight):
-        clickImageWithOffsets(IMAGE_ACTIVITY_LEGION_START_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
-
-    waitImageDetected(IMAGE_ACTIVITY_LEGION_READY_PATH,startX,startY,windowWidth,windowHeight)
-    clickImageWithOffsets(IMAGE_ACTIVITY_LEGION_READY_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
-    while isImageDetected(IMAGE_ACTIVITY_LEGION_READY_PATH,startX,startY,windowWidth,windowHeight):
-        clickImageWithOffsets(IMAGE_ACTIVITY_LEGION_READY_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
-
-    waitImageDetected(IMAGE_ACTIVITY_LEGION_FINISHED1_PATH,startX,startY,windowWidth,windowHeight)
-    clickImageWithOffsets(IMAGE_ACTIVITY_LEGION_FINISHED1_PATH,2,0.15,startX,startY,windowWidth,windowHeight)
-    while isImageDetected(IMAGE_ACTIVITY_LEGION_FINISHED1_PATH,startX,startY,windowWidth,windowHeight):
-        clickImageWithOffsets(IMAGE_ACTIVITY_LEGION_FINISHED1_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
-    
-    waitImageDetected(IMAGE_ACTIVITY_LEGION_FINISHED2_PATH,startX,startY,windowWidth,windowHeight)
-    clickImageWithOffsets(IMAGE_ACTIVITY_LEGION_FINISHED2_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
-    while isImageDetected(IMAGE_ACTIVITY_LEGION_FINISHED2_PATH,startX,startY,windowWidth,windowHeight):
-        clickImageWithOffsets(IMAGE_ACTIVITY_LEGION_FINISHED2_PATH,1,0.15,startX,startY,windowWidth,windowHeight)
-
 def gameTypeClubBreach(startX,startY,windowWidth,windowHeight,isCaptain):
 
     while True:
@@ -654,12 +576,7 @@ def account(number,gameType,limit,startX,startY,windowWidth,windowHeight,isCapta
             gameTypeBreach(startX,startY,windowWidth,windowHeight,isCaptain)
         elif gameType==5:
             gameTypeClubBreach(startX,startY,windowWidth,windowHeight,isCaptain)
-        elif gameType==6:
-            gameTypeActivityGenie(startX,startY,windowWidth,windowHeight,isCaptain)
-        '''
-        elif gameType==6:
-            gameTypeActivityLegion(startX,startY,windowWidth,windowHeight,isCaptain)
-        '''
+
         count+=1
         printWithTime("账户:%s:游戏类型:%s,已完成%s局"%(threading.current_thread().name,str(gameType),str(count)))
         message="%s:账户:%s:游戏类型:%s,已完成%s局"%(getTimeFormatted(),threading.current_thread().name,str(gameType),str(count))
@@ -677,8 +594,6 @@ def account(number,gameType,limit,startX,startY,windowWidth,windowHeight,isCapta
         sys.exit()
 
 def detectFailure(accountThread,startX,startY,windowWidth,windowHeight):
-    global lastOperationTime
-    
     waitImageDetected(IMAGE_FAILED_PATH,startX,startY,windowWidth,windowHeight,interval=5.0)
     message="错误:账户:%s:失败，请重新运行!"%(accountThread.name)
     gui.screenshot(IMAGE_SCREENSHOT_PATH)
@@ -691,9 +606,12 @@ def detectFailure(accountThread,startX,startY,windowWidth,windowHeight):
         
         if optionCloseGamesAfterFailure:
             os.system("taskkill /IM onmyoji.exe /F")
-        
+        if optionExitAfterFailure:
+            sys.exit()
+
         winsound.Beep(800,10000)
     threading.Thread(None,inner,str(accountThread.name)).start()
+    time.sleep(1.0)
     mainLocker.acquire()
     gui.alert(message,"错误",button="确定")
 
@@ -701,7 +619,7 @@ def detectDisconnection(accountThread,startX,startY,windowWidth,windowHeight):
     global lastOperationTime
 
     while (True):
-        waitImageDetected(IMAGE_CONNECTING_PATH,startX,startY,windowWidth,windowHeight,interval=10.0)
+        waitImageDetected(IMAGE_CONNECTING_PATH,startX,startY,windowWidth,windowHeight,interval=5.0)
         message="警告:账户:%s:正在重新连接。。。。。。"%(accountThread.name)
         printWithTime(message)
         winsound.Beep(1000,10000)
@@ -731,12 +649,11 @@ def detectAssistance(startX,startY,windowWidth,windowHeight):
         printWithTime("消息:账户:%s:已尝试接受悬赏封印邀请"%(threading.current_thread().name))
 
 def detectOccupation():
-    global lastOperationTime
-    
     waitImageDetected(IMAGE_OCCUPIED_PATH,0,0,screenWidth,screenHeight,interval=5.0)
     message="错误:检测到账户在其他设备登录!"
     printWithTime(message)
     def inner():
+        global lastOperationTime
         mainLocker.acquire()
         lastOperationTime=time.time()
         mainLocker.release()
@@ -744,21 +661,20 @@ def detectOccupation():
         
         if optionCloseGamesIfOccupied:
             os.system("taskkill /IM onmyoji.exe /F")
+        if optionExitIfOccupied:
+            sys.exit()
             
         winsound.Beep(1000,10000)
     threading.Thread(None,inner).start()
-    mainLocker.acquire()
-    #gui.alert(message,"错误",button="确定")
 
 def detectFoodInsufficiency(startX,startY,windowWidth,windowHeight):
-    global lastOperationTime
-
     while True:
         waitImageDetected(IMAGE_FOOD_INSUFFICIENCY_PATH,startX,startY,screenWidth,screenHeight,interval=5.0)
 
         message="错误:账户:%s:检测到体力不足"%(threading.current_thread().name)
         printWithTime(message)
         def inner():
+            global lastOperationTime
             mainLocker.acquire()
             lastOperationTime=time.time()
             mainLocker.release()
@@ -766,6 +682,8 @@ def detectFoodInsufficiency(startX,startY,windowWidth,windowHeight):
             
             if optionCloseGamesIfFoodNotEnough:
                 os.system("taskkill /IM onmyoji.exe /F")
+            if optionCloseGamesIfFoodNotEnough:
+                sys.exit()
                 
             winsound.Beep(1000,10000)
             
@@ -775,7 +693,6 @@ def detectFoodInsufficiency(startX,startY,windowWidth,windowHeight):
             clickImageWithOffsets(IMAGE_CLOSE_DIALOG_PATH,1,0.1,startX,startY,windowWidth,windowHeight)
             
         threading.Thread(None,inner).start()
-        mainLocker.acquire()
         #gui.alert(message,"错误",button="确定")
 
 def detectPause():
@@ -864,7 +781,7 @@ def init():
         if configPraser.has_option("Options","ReplaceIfShikigamiFull"):
             optineReplaceIfShikigamiFull=options.getboolean("ReplaceIfShikigamiFull")
 
-    printWithTime("消息:已读取配置文件")
+        printWithTime("消息:已读取配置文件")
 
 def main():
     winsound.Beep(500,100)
@@ -875,7 +792,7 @@ def main():
     while accountCount:
         accountCount-=1
 
-        gameType=int(inputWithTimePrompt("游戏类型(1.多人御魂/觉醒 2.章节探索 3.单人御魂/业原火/御灵 4.结界突破 5.道馆 6.活动-修罗战场:"))
+        gameType=int(inputWithTimePrompt("游戏类型(1.多人御魂/觉醒 2.章节探索 3.单人御魂/业原火/御灵 4.结界突破 5.道馆):"))
         limit=int(inputWithTimePrompt("局数:"))
         startX=int(inputWithTimePrompt("窗口起始位置X:"))
         startY=int(inputWithTimePrompt("窗口起始位置Y:"))
