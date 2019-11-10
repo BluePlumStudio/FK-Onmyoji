@@ -1,6 +1,6 @@
 '''
 Project:FK-Onmyoji
-Version:Beta 1.3.0
+Version:Beta 1.4.0
 
 Powered By BluePlum Studio:lzycc234
 https://github.com/BluePlumStudio/FK-Onmyoji
@@ -303,8 +303,8 @@ def gameTypeStory(startX,startY,windowWidth,windowHeight,isCaptain):
             #检测目标
             while detectCount:
                 detectCount-=1
-                if (isImageDetected(IMAGE_STROY_FIGHT_PATH,startX,startY,windowWidth-30,windowHeight)==False
-                       and isImageDetected(IMAGE_STROY_FIGHT_BOSS_PATH,startX,startY,windowWidth-30,windowHeight)==False):
+                if (isImageDetected(IMAGE_STROY_FIGHT_PATH,int(startX+windowWidth/10),startY,int(windowWidth-windowWidth/10),windowHeight)==False
+                       and isImageDetected(IMAGE_STROY_FIGHT_BOSS_PATH,int(startX+windowWidth/10),startY,int(windowWidth-windowWidth/10),windowHeight)==False):
                     resetMousePosition(startX,startY,windowWidth,windowHeight)
                     dragMouse(xDirection,random.uniform(0.01,0.1),windowWidth,windowHeight)
                     printWithTime("账户:%s:第%s次检测:%s"
@@ -589,7 +589,6 @@ def account(number,gameType,limit,startX,startY,windowWidth,windowHeight,isCapta
 
     if optionCloseGamesAfterFinish:
         os.system("taskkill /IM onmyoji.exe /F")
-    
     if optionExitAfterFinish:
         sys.exit()
 
@@ -640,12 +639,13 @@ def detectInterception(startX,startY,windowWidth,windowHeight):
 def detectAssistance(startX,startY,windowWidth,windowHeight):
     while (True):
         waitImageDetected(IMAGE_ASSISTANCE_PATH,startX,startY,windowWidth,windowHeight,interval=5.0)
+        mainLocker.acquire()
         printWithTime("消息:账户:%s:检测到悬赏封印邀请"%(threading.current_thread().name))
-        winsound.Beep(1000,500)
         waitImageDetected(IMAGE_ACCEPT_PATH,startX,startY,windowWidth,windowHeight)
         clickImageWithOffsets(IMAGE_ACCEPT_PATH,2,0.15,startX,startY,windowWidth,windowHeight)
         while isImageDetected(IMAGE_ACCEPT_PATH,startX,startY,windowWidth,windowHeight):
             clickImageWithOffsets(IMAGE_ACCEPT_PATH,1,0.1,startX,startY,windowWidth,windowHeight)
+        mainLocker.release()
         printWithTime("消息:账户:%s:已尝试接受悬赏封印邀请"%(threading.current_thread().name))
 
 def detectOccupation():
