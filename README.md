@@ -212,8 +212,8 @@
 
   [1]: https://t00y.com/file/15016760-403156759
   [2]: https://t00y.com/file/15016760-403129810
-  [3]: https://github.com/BluePlumStudio/FK-Onmyoji/blob/master/sample.png
-  [4]: https://github.com/BluePlumStudio/FK-Onmyoji/blob/master/sample2.png
-  [5]: https://github.com/BluePlumStudio/FK-Onmyoji/blob/master/sample3.png
-  [6]: https://github.com/BluePlumStudio/FK-Onmyoji/blob/master/screenshots/Story/selectedLevel.png
-  [7]: https://github.com/BluePlumStudio/FK-Onmyoji/blob/master/screenshots/Story/shikigamiSelected.png
+  [3]: https://github.com/BluePlumStudio/FK-Onmyoji/blob/renew/sample.png
+  [4]: https://github.com/BluePlumStudio/FK-Onmyoji/blob/renew/sample2.png
+  [5]: https://github.com/BluePlumStudio/FK-Onmyoji/blob/renew/sample3.png
+  [6]: https://github.com/BluePlumStudio/FK-Onmyoji/blob/renew/screenshots/Story/selectedLevel.png
+  [7]: https://github.com/BluePlumStudio/FK-Onmyoji/blob/renew/screenshots/Story/shikigamiSelected.png
