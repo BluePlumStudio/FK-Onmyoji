@@ -1,4 +1,5 @@
-# FK-Onmyoji-renew 高抗失效版
+# FK-Onmyoji-renew 
+# 全新架构 高抗失效
 
 **阴阳师抗检测多功能护肝辅助脚本**
 
