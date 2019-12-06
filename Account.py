@@ -66,6 +66,7 @@ _GLOBAL_CONFIG_PATH="./config.ini"
 _globalConfig=Config(_GLOBAL_CONFIG_PATH)
 _accountCount=0
 _fullShikigamiCount=0
+_isPaused=False
 
 _detectPauseThread=threading.Thread()
 _accountLocker=threading.Lock()
@@ -145,6 +146,7 @@ class Account(threading.Thread):
 #
     def gameModeStory(self):
         global _fullShikigamiCount
+        global _isPaused
         printWithTime("消息:账户:%s:章节探索"%(str(self.__id)))
 
         while True:
@@ -294,9 +296,12 @@ class Account(threading.Thread):
 
                     seconds=30
                     while seconds and innerThread.isAlive():
+                        printWithTime("消息:账户:%s:等待式神替换结束"%(str(self.__id)))
                         time.sleep(1.0)
                         seconds-=1
                     stopThread(innerThread)
+                    if not _isPaused:
+                        self.__gui.GUIRelease()
                 
                 position=self.__gui.getImagePositionInScreenshot(IMAGE_STROY_READY_PATH,screenshot)
                 if position != None:
@@ -434,16 +439,16 @@ class Account(threading.Thread):
 
 #
     def detectPause(self):
-        isPaused=False
+        global _isPaused
         while True:
             keyboard.wait(hotkey='f12')
-            #printWithTime("F12")
-            if isPaused:
-                isPaused=False
+            printWithTime("消息:F12被按下")
+            if _isPaused:
+                _isPaused=False
                 self.__gui.GUIRelease()
                 printWithTime("已继续")
             else:
-                isPaused=True
+                _isPaused=True
                 self.__gui.GUIAcquire()
                 printWithTime("已暂停")
 #
