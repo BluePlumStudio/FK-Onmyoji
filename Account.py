@@ -594,3 +594,7 @@ class Account(threading.Thread):
         message="%s:账户:%s:游戏类型:%s,已完成"%(getTimeFormatted(),str(self.__id),str(self.__gameMode))
         threading.Thread(None,self.feedback,str(self.__id),args=(message,)).start()
         winsound.Beep(800,1000)
+        if _globalConfig.closeGamesAfterFinish:
+            os.system("taskkill /IM onmyoji.exe /F")
+        if _globalConfig.exitAfterFinish:
+            sys.exit()
