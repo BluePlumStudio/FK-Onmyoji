@@ -26,8 +26,9 @@ class GUI(object):
         global _GUILocker
         global _isGUILockerAcquired
 
-        _GUILocker.release()
-        _isGUILockerAcquired=False
+        if _isGUILockerAcquired:
+            _GUILocker.release()
+            _isGUILockerAcquired=False
 #
     def GUIIsAcquired(self):
         global _GUILocker
@@ -46,19 +47,19 @@ class GUI(object):
             return True
 #
     def updateOperationTime(self):
-        _GUILocker.acquire()
+        self.GUIAcquire()
 
         self.__lastOperationTime=time.time()
 
-        _GUILocker.release()
+        self.GUIRelease()
 #
     def click(self):
-        _GUILocker.acquire()
+        self.GUIAcquire()
 
         pyautogui.click()
         self.__lastOperationTime=time.time()
 
-        _GUILocker.release()
+        self.GUIRelease()
 #
     def genPositionOffsets(self,position):
         offsetWidth=round(random.uniform(-1,1)*position.width/2,4)
@@ -67,17 +68,17 @@ class GUI(object):
         return offsetWidth,offsetHeight
 #
     def setMouseToRandomPosition(self,duration=0.2):
-        _GUILocker.acquire()
+        self.GUIAcquire()
 
         pyautogui.moveTo(self.__startX+random.uniform(0.3,0.7)*self.__windowWidth,
                 self.__startY+random.uniform(0.3,0.7)*self.__windowHeight+30,
                 duration,
                 pyautogui.easeInOutQuad)
 
-        _GUILocker.release()
+        self.GUIRelease()
 #
     def clickRandomPosition(self,duration=0.2):
-        _GUILocker.acquire()
+        self.GUIAcquire()
 
         pyautogui.moveTo(self.__startX+random.uniform(0.3,0.7)*self.__windowWidth,
             self.__startY+random.uniform(0.4,0.7)*self.__windowHeight,
@@ -86,21 +87,21 @@ class GUI(object):
         pyautogui.click()
         self.__lastOperationTime=time.time()
 
-        _GUILocker.release()
+        self.GUIRelease()
 #
     def clickCoordinate(self,x,y,clicks=1,duration=0.2):
-        _GUILocker.acquire()
+        self.GUIAcquire()
 
         pyautogui.moveTo(x,y,duration,pyautogui.easeInOutQuad)
         pyautogui.click(x,y,clicks,random.uniform(0.1,1))
         self.__lastOperationTime=time.time()
 
-        _GUILocker.release()
+        self.GUIRelease()
 #
     def clickImageWithOffsets(self,imagePath,clicks=1,duration=0.2,offsetX=0,offsetY=0,accuracy=0.9):
         ret=False
 
-        _GUILocker.acquire()
+        self.GUIAcquire()
 
         position=pyautogui.locateOnScreen(imagePath,
                     region=(self.__startX,self.__startY,self.__windowWidth,self.__windowHeight),
@@ -115,14 +116,14 @@ class GUI(object):
         else:
             ret=False
 
-        _GUILocker.release()
+        self.GUIRelease()
 
         return ret
 #
     def clickPositionWithOffsets(self,position,clicks=1,duration=0.2,offsetX=0,offsetY=0,accuracy=0.9):
         ret=False
 
-        _GUILocker.acquire()
+        self.GUIAcquire()
 
         if position:
             x,y=pyautogui.center(position)
@@ -134,14 +135,14 @@ class GUI(object):
         else:
             ret=False
 
-        _GUILocker.release()
+        self.GUIRelease()
 
         return ret
 #
     def moveToImage(self,imagePath,duration=0.1,accuracy=0.9):
         ret=False
 
-        _GUILocker.acquire()
+        self.GUIAcquire()
 
         position=pyautogui.locateOnScreen(imagePath,
                     region=(self.__startX,self.__startY,self.__windowWidth,self.__windowHeight),
@@ -153,7 +154,7 @@ class GUI(object):
         else:
             ret=False
 
-        _GUILocker.release()
+        self.GUIRelease()
 
         return ret
 #
@@ -178,7 +179,7 @@ class GUI(object):
         moveX=round(directionX*random.uniform(0.3,0.6)*self.__windowWidth,4)
         moveY=round(directionY*random.uniform(0.3,0.6)*self.__windowHeight,4)
 
-        _GUILocker.acquire()
+        self.GUIAcquire()
 
         pyautogui.mouseDown()
         time.sleep(interval)
@@ -187,10 +188,10 @@ class GUI(object):
         pyautogui.mouseUp()
         self.__lastOperationTime=time.time()
 
-        _GUILocker.release()
+        self.GUIRelease()
 #
     def dragMouseTo(self,x,y,duration=0.1,interval=0.0):
-        _GUILocker.acquire()
+        self.GUIAcquire()
 
         pyautogui.mouseDown()
         time.sleep(interval)
@@ -199,15 +200,15 @@ class GUI(object):
         pyautogui.mouseUp()
         self.__lastOperationTime=time.time()
         
-        _GUILocker.release()
+        self.GUIRelease()
 #
     def scroll(self,clicks):
-        _GUILocker.acquire()
+        self.GUIAcquire()
 
         pyautogui.scroll(clicks)
         self.__lastOperationTime=time.time()
         
-        _GUILocker.release()
+        self.GUIRelease()
 #
     def isImageDetected(self,imagePath,accuracy=0.9):
         if (pyautogui.locateOnScreen(imagePath,

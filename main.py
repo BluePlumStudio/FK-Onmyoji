@@ -1,6 +1,6 @@
 '''
 Project:FK-Onmyoji-Renew
-Version:1.0.0
+Version:1.1.0
 
 Powered By BluePlum Studio:lzycc234
 https://github.com/BluePlumStudio/FK-Onmyoji

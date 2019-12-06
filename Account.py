@@ -186,11 +186,11 @@ class Account(threading.Thread):
                         self.__gui.setMouseToRandomPosition()
                         self.__gui.dragMouseToRandomPosition(_localVariable.xDirection,random.uniform(0.01,0.1))
                         printWithTime("账户:%s:第%s次检测:%s"
-                                    %(str(self.__id),str(8-_localVariable.detectCount),IMAGE_STROY_FIGHT_PATH))
+                                    %(str(self.__id),str(10-_localVariable.detectCount),IMAGE_STROY_FIGHT_PATH))
                         printWithTime("账户:%s:第%s次检测:%s"
-                                    %(str(self.__id),str(8-_localVariable.detectCount),IMAGE_STROY_FIGHT_BOSS_PATH))
+                                    %(str(self.__id),str(10-_localVariable.detectCount),IMAGE_STROY_FIGHT_BOSS_PATH))
                         if _localVariable.detectCount==0:
-                            _localVariable.detectCount=8
+                            _localVariable.detectCount=10
                             _localVariable.xDirection=-_localVariable.xDirection
                             
                 position=self.__gui.getImagePositionInScreenshot(IMAGE_STROY_FIGHT_PATH,screenshot)
@@ -286,8 +286,13 @@ class Account(threading.Thread):
                     innerThread=threading.Thread(None,inner,str(self.__id))
                     innerThread.start()
 
-                    seconds=30
                     time.sleep(1.0)
+                    seconds=30
+                    while seconds and not innerThread.isAlive():
+                        time.sleep(1.0)
+                        seconds-=1
+
+                    seconds=30
                     while seconds and innerThread.isAlive():
                         time.sleep(1.0)
                         seconds-=1
@@ -429,15 +434,18 @@ class Account(threading.Thread):
 
 #
     def detectPause(self):
+        isPaused=False
         while True:
             keyboard.wait(hotkey='f12')
-
-            if self.__gui.GUIIsAcquired():
+            #printWithTime("F12")
+            if isPaused:
+                isPaused=False
                 self.__gui.GUIRelease()
-                printWithTime("账户:%s:已继续"%(str(self.__id)))
+                printWithTime("已继续")
             else:
+                isPaused=True
                 self.__gui.GUIAcquire()
-                printWithTime("账户:%s:已暂停"%(str(self.__id)))
+                printWithTime("已暂停")
 #
     def detectFailure(self):
         while True:
@@ -542,8 +550,13 @@ class Account(threading.Thread):
         _feedbackerLocker.release()
 #
     def run(self):
+        _localVariable.isBossDetected=False
+        _localVariable.isEntered=False
+        _localVariable.isFighting=False
+        _localVariable.detectCount=10
+        _localVariable.xDirection=-1.0
         count=0
-        while self.__total:
+        while self.__total-count>0:
             seconds=1
             while seconds:
                 printWithTime("账户:%s:"%(str(self.__id))+str(seconds)+"s后开始")
@@ -563,7 +576,7 @@ class Account(threading.Thread):
             elif self.__gameMode==2:
                 _localVariable.isEntered=False
                 _localVariable.isFighting=False
-                _localVariable.detectCount=8
+                _localVariable.detectCount=10
                 _localVariable.xDirection=-1.0
                 self.gameModeStory()
             elif self.__gameMode==3:
@@ -580,3 +593,4 @@ class Account(threading.Thread):
 
         message="%s:账户:%s:游戏类型:%s,已完成"%(getTimeFormatted(),str(self.__id),str(self.__gameMode))
         threading.Thread(None,self.feedback,str(self.__id),args=(message,)).start()
+        winsound.Beep(800,1000)
