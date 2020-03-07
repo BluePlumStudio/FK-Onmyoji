@@ -59,9 +59,22 @@ IMAGE_BREACH_SELECTION_MARK_PATH="./screenshots/Breach/selectionMark.png"
 
 IMAGE_CLUB_BREACH_READY_PATH="./screenshots/ClubBreach/ready.png"
 IMAGE_CLUB_BREACH_FINISHED2_PATH="./screenshots/ClubBreach/finished2.png"
+
+IMAGE_SEAL_TEAM_PATH="./screenshots/Seal/team.png"
+IMAGE_SEAL_GIFT_PATH="./screenshots/Seal/gift.png"
+IMAGE_SEAL_ACHIEVEMENT_PATH="./screenshots/Seal/achievement.png"
+IMAGE_SEAL_BACK_1_PATH="./screenshots/Seal/back1.png"
+IMAGE_SEAL_BACK_2_PATH="./screenshots/Seal/back2.png"
+IMAGE_SEAL_CLOSE_PATH="./screenshots/Seal/close.png"
+IMAGE_SEAL_SEAL_PATH="./screenshots/Seal/seal.png"
+IMAGE_SEAL_MATCH_PATH="./screenshots/Seal/match.png"
+IMAGE_SEAL_START_PATH="./screenshots/Seal/start.png"
+IMAGE_SEAL_READY_PATH="./screenshots/Seal/ready.png"
+IMAGE_SEAL_FINISHED1_PATH="./screenshots/Seal/finished1.png"
+IMAGE_SEAL_FINISHED2_PATH="./screenshots/Seal/finished2.png"
 #
 _localVariable=threading.local()
-_DETECTION_INTERVAL=0.25
+_DETECTION_INTERVAL=0.2
 _GLOBAL_CONFIG_PATH="./config.ini"
 _globalConfig=Config(_GLOBAL_CONFIG_PATH)
 _accountCount=0
@@ -93,8 +106,9 @@ class Account(threading.Thread):
         self.__id=_accountCount
         _accountCount+=1
 
-        self._detectFailureThread=threading.Thread(None,self.detectFailure,args=())
-        self._detectFailureThread.start()
+        if self.__gameMode!=4:
+            self._detectFailureThread=threading.Thread(None,self.detectFailure,args=())
+            self._detectFailureThread.start()
         self._detectAssistance=threading.Thread(None,self.detectAssistance,args=())
         self._detectAssistance.start()
         self._detectOccupation=threading.Thread(None,self.detectOccupation,args=())
@@ -328,6 +342,9 @@ class Account(threading.Thread):
 
                 position=self.__gui.getImagePositionInScreenshot(IMAGE_STROY_ACCEPT_PATH,screenshot)
                 if position != None:
+                    message="消息:账户:%s:已尝试接受新一轮章节探索"%(str(self.__id))
+                    printWithTime(message)
+                    threading.Thread(None,self.feedback,str(self.__id),args=(message,)).start()
                     printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_STROY_ACCEPT_PATH,position.left,position.top))
                     self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
                     continue
@@ -436,7 +453,79 @@ class Account(threading.Thread):
                         break
                     printWithTime("消息:账户:%s:检测到图像:%s"%(str(self.__id),IMAGE_CLUB_BREACH_READY_PATH))
                 break  
+#
+    def gameModeSeal(self):
+        printWithTime("消息:账户:%s:妖气封印"%(str(self.__id)))
+        while True:
+            screenshot = self.__gui.getScreenshot()
+            time.sleep(_DETECTION_INTERVAL*4)
 
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_SEAL_TEAM_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_SEAL_TEAM_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_SEAL_ACHIEVEMENT_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_SEAL_ACHIEVEMENT_PATH,position.left,position.top))
+                position=self.__gui.getImagePositionInScreenshot(IMAGE_SEAL_BACK_2_PATH,screenshot)
+                if position != None:
+                    printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_SEAL_BACK_2_PATH,position.left,position.top))
+                    self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_SEAL_CLOSE_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_SEAL_CLOSE_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_SEAL_GIFT_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_SEAL_GIFT_PATH,position.left,position.top))
+                position=self.__gui.getImagePositionInScreenshot(IMAGE_SEAL_BACK_1_PATH,screenshot)
+                if position != None:
+                    printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_SEAL_BACK_1_PATH,position.left,position.top))
+                    self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_SEAL_SEAL_PATH,screenshot)
+            if position != None:
+                position=self.__gui.getImagePositionInScreenshot(IMAGE_SEAL_MATCH_PATH,screenshot)
+                if position != None:
+                    printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_SEAL_MATCH_PATH,position.left,position.top))
+                    self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_SEAL_START_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_SEAL_START_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_SEAL_READY_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_SEAL_READY_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_SEAL_FINISHED1_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_SEAL_FINISHED1_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,2,0.2,self.__startX,self.__startY)
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_SEAL_FINISHED2_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_SEAL_FINISHED2_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                
+                while True:
+                    if not self.__gui.clickImageWithOffsets(IMAGE_SEAL_FINISHED2_PATH,1,0.2):
+                        break
+                    printWithTime("消息:账户:%s:检测到图像:%s:位置"%(str(self.__id),IMAGE_SEAL_FINISHED2_PATH))
+                break  
 #
     def detectPause(self):
         global _isPaused
@@ -556,8 +645,7 @@ class Account(threading.Thread):
 #
     def run(self):
         _localVariable.isBossDetected=False
-        _localVariable.isEntered=False
-        _localVariable.isFighting=False
+        _localVariable.isFailureDetected=False
         _localVariable.detectCount=10
         _localVariable.xDirection=-1.0
         count=0
@@ -579,8 +667,6 @@ class Account(threading.Thread):
             if self.__gameMode==1:
                 self.gameModeMitama()
             elif self.__gameMode==2:
-                _localVariable.isEntered=False
-                _localVariable.isFighting=False
                 _localVariable.detectCount=10
                 _localVariable.xDirection=-1.0
                 self.gameModeStory()
@@ -590,7 +676,8 @@ class Account(threading.Thread):
                 self.gameModeBreach()
             elif self.__gameMode==5:
                 self.gameModeClubBreach()
-    
+            elif self.__gameMode==6:
+                self.gameModeSeal()
             count+=1
             message="%s:账户:%s:游戏类型:%s,已完成%s局,还剩余%s局"%(getTimeFormatted(),str(self.__id),str(self.__gameMode),str(count),str(self.__total-count))
             threading.Thread(None,self.feedback,str(self.__id),args=(message,)).start()
