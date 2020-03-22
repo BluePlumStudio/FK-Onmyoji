@@ -32,6 +32,8 @@ class Config(object):
                                     "CloseGamesIfOccupied":"True",
                                     "ExitIfFoodNotEnough":"False",
                                     "CloseGamesIfFoodNotEnough":"True",
+                                    "ExitIfDisconnected":"False",
+                                    "CloseGamesIfDisconnected":"True",
                                     "ReplaceIfShikigamiFull":"True"}
             
             with open(configFilePath, 'w') as configFile:
@@ -58,5 +60,9 @@ class Config(object):
                 self.exitIfFoodNotEnough=options.getboolean("ExitIfFoodNotEnough")
             if configPraser.has_option("Options","CloseGamesIfFoodNotEnough"):
                 self.closeGamesIfFoodNotEnough=options.getboolean("CloseGamesIfFoodNotEnough")
+            if configPraser.has_option("Options","ExitIfDisconnected"):
+                self.exitIfDisconnected=options.getboolean("ExitIfDisconnected")
+            if configPraser.has_option("Options","CloseGamesIfDisconnected"):
+                self.closeGamesIfDisconnected=options.getboolean("CloseGamesIfDisconnected")
             if configPraser.has_option("Options","ReplaceIfShikigamiFull"):
                 self.replaceShikigamiIfFull=options.getboolean("ReplaceIfShikigamiFull")

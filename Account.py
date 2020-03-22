@@ -19,6 +19,7 @@ IMAGE_ACCEPT_PATH="./screenshots/accept.png"
 IMAGE_OCCUPIED_PATH="./screenshots/occupied.png"
 IMAGE_FOOD_INSUFFICIENCY_PATH="./screenshots/food.png"
 IMAGE_CLOSE_DIALOG_PATH="./screenshots/close.png"
+IMAGE_DISCONNECTED_PATH="./screenshots/disconnected.png"
 
 IMAGE_MITAMA_START_PATH="./screenshots/Mitama/start.png"
 IMAGE_MITAMA_FINISHED1_PATH="./screenshots/Mitama/finished1.png"
@@ -115,6 +116,8 @@ class Account(threading.Thread):
         self._detectOccupation.start()
         self._detectFoodInsufficiency=threading.Thread(None,self.detectFoodInsufficiency,args=())
         self._detectFoodInsufficiency.start()
+        self._detectDisconnection=threading.Thread(None,self.detectDisconnection,args=())
+        self._detectDisconnection.start()
 
         _accountLocker.acquire()
 
@@ -212,13 +215,13 @@ class Account(threading.Thread):
                 position=self.__gui.getImagePositionInScreenshot(IMAGE_STROY_FIGHT_PATH,screenshot)
                 if position != None:
                     printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_STROY_FIGHT_PATH,position.left,position.top))
-                    self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                    self.__gui.clickPositionWithOffsets(position,1,0.1,self.__startX,self.__startY)
                     continue
 
                 position=self.__gui.getImagePositionInScreenshot(IMAGE_STROY_FIGHT_BOSS_PATH,screenshot)
                 if position != None:
                     printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_STROY_FIGHT_BOSS_PATH,position.left,position.top))
-                    self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                    self.__gui.clickPositionWithOffsets(position,1,0.1,self.__startX,self.__startY)
                     _localVariable.isBossDetected=True
                     continue
 
@@ -562,11 +565,10 @@ class Account(threading.Thread):
                 winsound.Beep(800,1000)
 
             threading.Thread(None,inner,str(str(self.__id))).start()
-            time.sleep(1.0)
 #
     def detectAssistance(self):
         while True:
-            time.sleep(_DETECTION_INTERVAL*16)
+            time.sleep(_DETECTION_INTERVAL*8)
             if not self.__gui.isImageDetected(IMAGE_ASSISTANCE_PATH):
                 continue
 
@@ -591,13 +593,16 @@ class Account(threading.Thread):
             printWithTime(message)
             threading.Thread(None,self.feedback,str(self.__id),args=(message,)).start()
             
-            self.__gui.updateOperationTime()
-            winsound.Beep(1000,10000)
+            def inner():
+                self.__gui.updateOperationTime()
+                winsound.Beep(1000,10000)
 
-            if _globalConfig.closeGamesIfOccupied:
-                os.system("taskkill /IM onmyoji.exe /F")
-            if _globalConfig.exitIfOccupied:
-                sys.exit()
+                if _globalConfig.closeGamesIfOccupied:
+                    os.system("taskkill /IM onmyoji.exe /F")
+                if _globalConfig.exitIfOccupied:
+                    sys.exit()
+            
+            threading.Thread(None,inner,str(str(self.__id))).start()
 #
     def detectFoodInsufficiency(self):
         while True:
@@ -610,15 +615,41 @@ class Account(threading.Thread):
             threading.Thread(None,self.feedback,str(self.__id),args=(message,)).start()
             self.__gui.clickImageWithOffsets(IMAGE_CLOSE_DIALOG_PATH)
 
-            self.__gui.updateOperationTime()
-            winsound.Beep(1000,5000)
-            
-            if _globalConfig.closeGamesIfFoodNotEnough:
-                os.system("taskkill /IM onmyoji.exe /F")
-            if _globalConfig.closeGamesIfFoodNotEnough:
-                sys.exit()
+            def inner():
+                self.__gui.updateOperationTime()
+                winsound.Beep(1000,5000)
+
+                if _globalConfig.closeGamesIfFoodNotEnough:
+                    os.system("taskkill /IM onmyoji.exe /F")
+                if _globalConfig.closeGamesIfFoodNotEnough:
+                    sys.exit()
                 
-            winsound.Beep(1000,1000)
+                winsound.Beep(1000,1000)
+            
+            threading.Thread(None,inner,str(str(self.__id))).start()
+#
+    def detectDisconnection(self):
+        while True:
+            time.sleep(_DETECTION_INTERVAL*20)
+            if not self.__gui.isImageDetected(IMAGE_DISCONNECTED_PATH):
+                continue
+
+            message="错误:账户:%s:检测到已断开连接"%(str(self.__id))
+            printWithTime(message)
+            threading.Thread(None,self.feedback,str(self.__id),args=(message,)).start()
+
+            def inner():
+                self.__gui.updateOperationTime()
+                winsound.Beep(1000,3000)
+
+                if _globalConfig.closeGamesIfDisconnected:
+                    os.system("taskkill /IM onmyoji.exe /F")
+                if _globalConfig.closeGamesIfDisconnected:
+                    sys.exit()
+                
+                winsound.Beep(1000,1000)
+                
+            threading.Thread(None,inner,str(str(self.__id))).start()
 #
     def feedback(self,message):
         global _feedbackerLocker
