@@ -31,12 +31,14 @@
 ## 方案1：直接下载可执行程序 ##
  
  [Beta 1.0.0下载地址][1]
+ 
+ [Stable 20200322下载地址][8]
 
 ## 方案2：手动部署Python脚本运行环境 ##
 
  1. 安装Python3.6（>=3.6）。
 
- 2. 安装拓展库：
+ 2. 安装拓展库（全部安装命令在**Extension List.txt**里）：
 
     **PyAutoGUI**
 
@@ -167,6 +169,10 @@
 	ExitIfFoodNotEnough = False      （检测到体力不足后退出程序）
 
     CloseGamesIfFoodNotEnough = True （检测到体力不足后关闭游戏）
+	
+	ExitIfDisconnected = False       （检测到断线后退出程序）
+	
+	CloseGamesIfDisconnected = True  （检测到断线后关闭游戏）
 
     ReplaceIfShikigamiFull = True    （检测到式神经验已满后更换式神）
 
@@ -216,3 +222,4 @@
   [5]: https://github.com/BluePlumStudio/FK-Onmyoji/blob/renew/sample3.png
   [6]: https://github.com/BluePlumStudio/FK-Onmyoji/blob/renew/screenshots/Story/selectedLevel.png
   [7]: https://github.com/BluePlumStudio/FK-Onmyoji/blob/renew/screenshots/Story/shikigamiSelected.png
+  [8]: https://tc5.us/file/15016760-431140081
