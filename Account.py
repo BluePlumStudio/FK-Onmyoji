@@ -21,6 +21,7 @@ IMAGE_FOOD_INSUFFICIENCY_PATH="./screenshots/food.png"
 IMAGE_CLOSE_DIALOG_PATH="./screenshots/close.png"
 IMAGE_DISCONNECTED_PATH="./screenshots/disconnected.png"
 
+IMAGE_MITAMA_INVITE_PATH="./screenshots/Mitama/teamInvite.png"
 IMAGE_MITAMA_START_PATH="./screenshots/Mitama/start.png"
 IMAGE_MITAMA_FINISHED1_PATH="./screenshots/Mitama/finished1.png"
 IMAGE_MITAMA_FINISHED2_PATH="./screenshots/Mitama/finished2.png"
@@ -138,11 +139,20 @@ class Account(threading.Thread):
             time.sleep(_DETECTION_INTERVAL)
 
             if self.__isCaptain:
-                position=self.__gui.getImagePositionInScreenshot(IMAGE_MITAMA_START_PATH,screenshot)
-                if position != None:
-                    printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_MITAMA_START_PATH,position.left,position.top))
-                    self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
-                    continue
+                if _globalConfig.isFullTeam:
+                    position=self.__gui.getImagePositionInScreenshot(IMAGE_MITAMA_INVITE_PATH,screenshot)
+                    if position == None:
+                        position=self.__gui.getImagePositionInScreenshot(IMAGE_MITAMA_START_PATH,screenshot)
+                        if position != None:
+                            printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_MITAMA_START_PATH,position.left,position.top))
+                            self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                            continue
+                else:
+                    position=self.__gui.getImagePositionInScreenshot(IMAGE_MITAMA_START_PATH,screenshot)
+                    if position != None:
+                        printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_MITAMA_START_PATH,position.left,position.top))
+                        self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                        continue
             
             position=self.__gui.getImagePositionInScreenshot(IMAGE_MITAMA_FINISHED1_PATH,screenshot)
             if position != None:

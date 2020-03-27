@@ -173,6 +173,8 @@
 	ExitIfDisconnected = False       （检测到断线后退出程序）
 	
 	CloseGamesIfDisconnected = True  （检测到断线后关闭游戏）
+	
+	IfFullTeam = False               （御魂/觉醒组队是否满员后再开始）
 
     ReplaceIfShikigamiFull = True    （检测到式神经验已满后更换式神）
 

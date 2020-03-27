@@ -18,9 +18,20 @@ class Config(object):
         self.closeGamesIfOccupied=True
         self.exitIfFoodNotEnough=False
         self.closeGamesIfFoodNotEnough=True
+        self.isFullTeam=False
         self.replaceShikigamiIfFull=True
 #
     def __init__(self,configFilePath):
+        self.exitAfterFinish=False
+        self.closeGamesAfterFinish=False
+        self.exitAfterFailure=False
+        self.closeGamesAfterFailure=True
+        self.exitIfOccupied=False
+        self.closeGamesIfOccupied=True
+        self.exitIfFoodNotEnough=False
+        self.closeGamesIfFoodNotEnough=True
+        self.isFullTeam=False
+        self.replaceShikigamiIfFull=True
         configPraser=newConfigparser()
         
         if (pathlib.Path(configFilePath).exists())==False:
@@ -34,6 +45,7 @@ class Config(object):
                                     "CloseGamesIfFoodNotEnough":"True",
                                     "ExitIfDisconnected":"False",
                                     "CloseGamesIfDisconnected":"True",
+                                    "IsFullTeam":"False",
                                     "ReplaceIfShikigamiFull":"True"}
             
             with open(configFilePath, 'w') as configFile:
@@ -64,5 +76,7 @@ class Config(object):
                 self.exitIfDisconnected=options.getboolean("ExitIfDisconnected")
             if configPraser.has_option("Options","CloseGamesIfDisconnected"):
                 self.closeGamesIfDisconnected=options.getboolean("CloseGamesIfDisconnected")
+            if configPraser.has_option("Options","IsFullTeam"):
+                self.isFullTeam=options.getboolean("IsFullTeam")
             if configPraser.has_option("Options","ReplaceIfShikigamiFull"):
                 self.replaceShikigamiIfFull=options.getboolean("ReplaceIfShikigamiFull")
