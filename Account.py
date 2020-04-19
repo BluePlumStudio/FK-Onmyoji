@@ -15,6 +15,7 @@ IMAGE_FAILED_PATH="./screenshots/failed.png"
 IMAGE_SCREENSHOT_PATH="./screenshots/screenshot.png"
 IMAGE_CONNECTING_PATH="./screenshots/connecting.png"
 IMAGE_ASSISTANCE_PATH="./screenshots/assistance.png"
+IMAGE_ASSISTANCE_2_PATH="./screenshots/assistance2.png"
 IMAGE_ACCEPT_PATH="./screenshots/accept.png"
 IMAGE_OCCUPIED_PATH="./screenshots/occupied.png"
 IMAGE_FOOD_INSUFFICIENCY_PATH="./screenshots/food.png"
@@ -108,7 +109,7 @@ class Account(threading.Thread):
         self.__id=_accountCount
         _accountCount+=1
 
-        if self.__gameMode!=4:
+        if self.__gameMode!=4 and self.__gameMode!=6:
             self._detectFailureThread=threading.Thread(None,self.detectFailure,args=())
             self._detectFailureThread.start()
         self._detectAssistance=threading.Thread(None,self.detectAssistance,args=())
@@ -225,13 +226,13 @@ class Account(threading.Thread):
                 position=self.__gui.getImagePositionInScreenshot(IMAGE_STROY_FIGHT_PATH,screenshot)
                 if position != None:
                     printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_STROY_FIGHT_PATH,position.left,position.top))
-                    self.__gui.clickPositionWithOffsets(position,1,0.1,self.__startX,self.__startY)
+                    self.__gui.clickPositionWithOffsets(position,1,0.11,self.__startX,self.__startY)
                     continue
 
                 position=self.__gui.getImagePositionInScreenshot(IMAGE_STROY_FIGHT_BOSS_PATH,screenshot)
                 if position != None:
                     printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_STROY_FIGHT_BOSS_PATH,position.left,position.top))
-                    self.__gui.clickPositionWithOffsets(position,1,0.1,self.__startX,self.__startY)
+                    self.__gui.clickPositionWithOffsets(position,1,0.11,self.__startX,self.__startY)
                     _localVariable.isBossDetected=True
                     continue
 
@@ -314,8 +315,7 @@ class Account(threading.Thread):
                     
                     innerThread=threading.Thread(None,inner,str(self.__id))
                     innerThread.start()
-
-                    time.sleep(1.0)
+                    winsound.Beep(1000,3000)
                     seconds=30
                     while seconds and not innerThread.isAlive():
                         time.sleep(1.0)
@@ -473,6 +473,13 @@ class Account(threading.Thread):
             screenshot = self.__gui.getScreenshot()
             time.sleep(_DETECTION_INTERVAL*4)
 
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_FAILED_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:失败，准备重试"%(str(self.__id)))
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_FAILED_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,2,0.2,self.__startX,self.__startY)
+                continue
+
             position=self.__gui.getImagePositionInScreenshot(IMAGE_SEAL_TEAM_PATH,screenshot)
             if position != None:
                 printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_SEAL_TEAM_PATH,position.left,position.top))
@@ -578,8 +585,8 @@ class Account(threading.Thread):
 #
     def detectAssistance(self):
         while True:
-            time.sleep(_DETECTION_INTERVAL*8)
-            if not self.__gui.isImageDetected(IMAGE_ASSISTANCE_PATH):
+            time.sleep(_DETECTION_INTERVAL*10)
+            if (not self.__gui.isImageDetected(IMAGE_ASSISTANCE_PATH)) and (not self.__gui.isImageDetected(IMAGE_ASSISTANCE_2_PATH)):
                 continue
 
             message="消息:账户:%s:检测到悬赏封印邀请"%(str(self.__id))
