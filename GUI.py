@@ -67,11 +67,11 @@ class GUI(object):
 
         return offsetWidth,offsetHeight
 #
-    def setMouseToRandomPosition(self,duration=0.2):
+    def setMouseToRandomPosition(self,offsetX=0,offsetY=0,rangeX=0.4,rangeY=0.4,duration=0.2):
         self.GUIAcquire()
 
-        pyautogui.moveTo(self.__startX+random.uniform(0.3,0.7)*self.__windowWidth,
-                self.__startY+random.uniform(0.3,0.7)*self.__windowHeight+30,
+        pyautogui.moveTo(offsetX+self.__startX+random.uniform(0.0,rangeX)*self.__windowWidth,
+                offsetY+self.__startY+random.uniform(0.0,rangeY)*self.__windowHeight,
                 duration,
                 pyautogui.easeInOutQuad)
 
@@ -161,6 +161,12 @@ class GUI(object):
     def moveToCenter(self,duration=0.1):
         pyautogui.moveTo(self.__startX+self.__windowWidth/2,
             self.__startY+self.__windowHeight/2,
+            duration,
+            pyautogui.easeInOutQuad)
+#
+    def moveTo(self,x,y,duration=0.1):
+        pyautogui.moveTo(self.__startX+x,
+            self.__startY+y,
             duration,
             pyautogui.easeInOutQuad)
 ###

@@ -59,9 +59,11 @@ IMAGE_BREACH_FINISHED1_PATH="./screenshots/Breach/finished1.png"
 IMAGE_BREACH_FINISHED2_PATH="./screenshots/Breach/finished2.png"
 IMAGE_BREACH_SHIKIGAMI_SELECTED_PATH="./screenshots/Breach/shikigamiSelected.png"
 IMAGE_BREACH_SELECTION_MARK_PATH="./screenshots/Breach/selectionMark.png"
+IMAGE_BREACH_FAILED_PATH="./screenshots/Breach/failed.png"
+IMAGE_BREACH_BREACH_PATH="./screenshots/Breach/breach.png"
 
-IMAGE_CLUB_BREACH_READY_PATH="./screenshots/ClubBreach/ready.png"
-IMAGE_CLUB_BREACH_FINISHED2_PATH="./screenshots/ClubBreach/finished2.png"
+IMAGE_CLUB_BATTLE_READY_PATH="./screenshots/TeamBattle/ready.png"
+IMAGE_CLUB_BATTLE_FINISHED2_PATH="./screenshots/TeamBattle/finished2.png"
 
 IMAGE_SEAL_TEAM_PATH="./screenshots/Seal/team.png"
 IMAGE_SEAL_GIFT_PATH="./screenshots/Seal/gift.png"
@@ -75,6 +77,27 @@ IMAGE_SEAL_START_PATH="./screenshots/Seal/start.png"
 IMAGE_SEAL_READY_PATH="./screenshots/Seal/ready.png"
 IMAGE_SEAL_FINISHED1_PATH="./screenshots/Seal/finished1.png"
 IMAGE_SEAL_FINISHED2_PATH="./screenshots/Seal/finished2.png"
+
+IMAGE_INVITE_CLUB_MEMBERS_INVITE="./screenshots/InviteClubMembers/invite.png"
+IMAGE_INVITE_CLUB_MEMBERS_REFRESH="./screenshots/InviteClubMembers/refresh.png"
+
+IMAGE_CLUB_BREACH_START_PATH="./screenshots/ClubBreach/start.png"
+IMAGE_CLUB_BREACH_SECTION_PATH="./screenshots/ClubBreach/section.png"
+IMAGE_CLUB_BREACH_FINISHED1_PATH="./screenshots/ClubBreach/finished1.png"
+IMAGE_CLUB_BREACH_FINISHED2_PATH="./screenshots/ClubBreach/finished2.png"
+IMAGE_CLUB_BREACH_SHIKIGAMI_SELECTED_PATH="./screenshots/ClubBreach/shikigamiSelected.png"
+IMAGE_CLUB_BREACH_SELECTION_MARK_PATH="./screenshots/ClubBreach/selectionMark.png"
+IMAGE_CLUB_BREACH_BREACH_REPORT_PATH="./screenshots/ClubBreach/breachReport.png"
+IMAGE_CLUB_BREACH_FAILED_PATH="./screenshots/ClubBreach/failed.png"
+IMAGE_CLUB_BREACH_EMPTY_PATH="./screenshots/ClubBreach/empty.png"
+IMAGE_CLUB_BREACH_COMMUNITY_PATH="./screenshots/ClubBreach/community.png"
+IMAGE_CLUB_BREACH_BREACH_PATH="./screenshots/ClubBreach/breach.png"
+IMAGE_CLUB_BREACH_CLUB_PATH="./screenshots/ClubBreach/club.png"
+IMAGE_CLUB_BREACH_CLOSE_PATH="./screenshots/ClubBreach/close.png"
+IMAGE_CLUB_BREACH_SCROLL_BAR_PATH="./screenshots/ClubBreach/scrollBar.png"
+
+IMAGE_CARD_SYNTHESIS_CARD_PATH="./screenshots/CardSynthesis/card.png"
+IMAGE_CARD_SYNTHESIS_START_PATH="./screenshots/CardSynthesis/start.png"
 #
 _localVariable=threading.local()
 _DETECTION_INTERVAL=0.2
@@ -109,7 +132,7 @@ class Account(threading.Thread):
         self.__id=_accountCount
         _accountCount+=1
 
-        if self.__gameMode!=4 and self.__gameMode!=6:
+        if self.__gameMode!=4 and self.__gameMode!=6 and self.__gameMode!=8 and self.__gameMode!=9:
             self._detectFailureThread=threading.Thread(None,self.detectFailure,args=())
             self._detectFailureThread.start()
         self._detectAssistance=threading.Thread(None,self.detectAssistance,args=())
@@ -213,7 +236,7 @@ class Account(threading.Thread):
                     _localVariable.detectCount-=1
                     if (not self.__gui.isImageDetected(IMAGE_STROY_FIGHT_PATH)
                         and not self.__gui.isImageDetected(IMAGE_STROY_FIGHT_BOSS_PATH)):
-                        self.__gui.setMouseToRandomPosition()
+                        self.__gui.setMouseToRandomPosition(self.__windowWidth*0.3,self.__windowHeight*0.3,0.4,0.4)
                         self.__gui.dragMouseToRandomPosition(_localVariable.xDirection,random.uniform(0.01,0.1))
                         printWithTime("账户:%s:第%s次检测:%s"
                                     %(str(self.__id),str(10-_localVariable.detectCount),IMAGE_STROY_FIGHT_PATH))
@@ -226,13 +249,13 @@ class Account(threading.Thread):
                 position=self.__gui.getImagePositionInScreenshot(IMAGE_STROY_FIGHT_PATH,screenshot)
                 if position != None:
                     printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_STROY_FIGHT_PATH,position.left,position.top))
-                    self.__gui.clickPositionWithOffsets(position,1,0.11,self.__startX,self.__startY)
+                    self.__gui.clickPositionWithOffsets(position,1,0.101,self.__startX,self.__startY)
                     continue
 
                 position=self.__gui.getImagePositionInScreenshot(IMAGE_STROY_FIGHT_BOSS_PATH,screenshot)
                 if position != None:
                     printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_STROY_FIGHT_BOSS_PATH,position.left,position.top))
-                    self.__gui.clickPositionWithOffsets(position,1,0.11,self.__startX,self.__startY)
+                    self.__gui.clickPositionWithOffsets(position,1,0.101,self.__startX,self.__startY)
                     _localVariable.isBossDetected=True
                     continue
 
@@ -447,24 +470,37 @@ class Account(threading.Thread):
                     if not self.__gui.clickImageWithOffsets(IMAGE_BREACH_FINISHED2_PATH):
                         break
                     printWithTime("消息:账户:%s:检测到图像:%s"%(str(self.__id),IMAGE_BREACH_FINISHED2_PATH))
-                break  
+                break
+            
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_BREACH_FAILED_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_BREACH_FAILED_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_BREACH_BREACH_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_BREACH_BREACH_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+
 #
-    def gameModeClubBreach(self):
+    def gameModeTeamBattle(self):
         printWithTime("消息:账户:%s:道馆"%(str(self.__id)))
         while True:
             screenshot = self.__gui.getScreenshot()
             time.sleep(_DETECTION_INTERVAL*4)
 
-            position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BREACH_READY_PATH,screenshot)
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BATTLE_READY_PATH,screenshot)
             if position != None:
-                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_CLUB_BREACH_READY_PATH,position.left,position.top))
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_CLUB_BATTLE_READY_PATH,position.left,position.top))
                 self.__gui.clickPositionWithOffsets(position,2,0.2,self.__startX,self.__startY)
                 time.sleep(_DETECTION_INTERVAL*4)
 
                 while True:
-                    if not self.__gui.clickImageWithOffsets(IMAGE_CLUB_BREACH_READY_PATH):
+                    if not self.__gui.clickImageWithOffsets(IMAGE_CLUB_BATTLE_READY_PATH):
                         break
-                    printWithTime("消息:账户:%s:检测到图像:%s"%(str(self.__id),IMAGE_CLUB_BREACH_READY_PATH))
+                    printWithTime("消息:账户:%s:检测到图像:%s"%(str(self.__id),IMAGE_CLUB_BATTLE_READY_PATH))
                 break  
 #
     def gameModeSeal(self):
@@ -546,6 +582,151 @@ class Account(threading.Thread):
                         break
                     printWithTime("消息:账户:%s:检测到图像:%s:位置"%(str(self.__id),IMAGE_SEAL_FINISHED2_PATH))
                 break  
+#
+    def gameModeInviteClubMembers(self):
+        printWithTime("消息:账户:%s:邀请寮成员"%(str(self.__id)))
+        while True:
+            screenshot = self.__gui.getScreenshot()
+            #time.sleep(_DETECTION_INTERVAL*4)
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_INVITE_CLUB_MEMBERS_INVITE,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_INVITE_CLUB_MEMBERS_INVITE,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.105,self.__startX,self.__startY)
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_INVITE_CLUB_MEMBERS_REFRESH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_INVITE_CLUB_MEMBERS_REFRESH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.105,self.__startX,self.__startY)
+                
+                while True:
+                    if not self.__gui.clickImageWithOffsets(IMAGE_INVITE_CLUB_MEMBERS_REFRESH,1,0.2):
+                        break
+                    printWithTime("消息:账户:%s:检测到图像:%s:位置"%(str(self.__id),IMAGE_INVITE_CLUB_MEMBERS_REFRESH))
+                break
+#
+    def gameModeClubBreach(self):
+        printWithTime("消息:账户:%s:寮结界突破"%(str(self.__id)))
+        while True:
+            screenshot = self.__gui.getScreenshot()
+            time.sleep(_DETECTION_INTERVAL*3)
+
+            if _localVariable.isInfoDelayed==True:
+                message="消息:账户:%s:寮结界信息滞后，尝试刷新"%(str(self.__id))
+                printWithTime(message)
+                position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BREACH_CLOSE_PATH,screenshot,0.7)
+                _localVariable.isInfoDelayed=False
+                _localVariable.startClickCount=0
+                if position != None:
+                    printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_CLUB_BREACH_CLOSE_PATH,position.left,position.top))
+                    self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                    continue
+            
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BREACH_CLUB_PATH,screenshot,0.95)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_CLUB_BREACH_CLUB_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BREACH_EMPTY_PATH,screenshot)
+            if position != None:
+                if not _localVariable.isEmpty:
+                    _localVariable.isEmpty=True
+                    printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_CLUB_BREACH_EMPTY_PATH,position.left,position.top))
+                    message="消息:账户:%s:剩余次数不足，冷却中"%(str(self.__id))
+                    printWithTime(message)
+                    threading.Thread(None,self.feedback,str(self.__id),args=(message,)).start()
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BREACH_START_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_CLUB_BREACH_START_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                _localVariable.startClickCount+=1
+                if _localVariable.startClickCount>=10:
+                    _localVariable.isInfoDelayed=True
+                    _localVariable.startClickCount=0
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BREACH_SECTION_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_CLUB_BREACH_SECTION_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+            ''''''
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BREACH_SELECTION_MARK_PATH,screenshot)
+            if position != None:
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BREACH_SHIKIGAMI_SELECTED_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_CLUB_BREACH_SHIKIGAMI_SELECTED_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+            ''''''
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BREACH_FINISHED1_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_CLUB_BREACH_FINISHED1_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,2,0.2,self.__startX,self.__startY)
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BREACH_FINISHED2_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_CLUB_BREACH_FINISHED2_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                
+                while True:
+                    if not self.__gui.clickImageWithOffsets(IMAGE_CLUB_BREACH_FINISHED2_PATH):
+                        break
+                    printWithTime("消息:账户:%s:检测到图像:%s"%(str(self.__id),IMAGE_CLUB_BREACH_FINISHED2_PATH))
+                break
+            ''''''
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BREACH_FAILED_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_CLUB_BREACH_FAILED_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+            '''
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BREACH_CLUB_PATH,screenshot,0.95)
+            if not position:
+                position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BREACH_BREACH_REPORT_PATH,screenshot)
+                position2=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BREACH_COMMUNITY_PATH,screenshot)
+                if position and not position2:
+                    self.__gui.setMouseToRandomPosition(self.__windowWidth*0.4,self.__windowHeight*0.4,0.2,0.3)
+                    self.__gui.dragMouseToRandomPosition(0.0,random.uniform(-0.01,-0.1))
+                    #self.__gui.scroll(-50)
+            else:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_CLUB_BREACH_CLUB_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+            '''
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BREACH_BREACH_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_CLUB_BREACH_BREACH_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+#
+    def gameModeCardSynthesis(self):
+        printWithTime("消息:账户:%s:结界卡合成"%(str(self.__id)))
+        while True:
+            screenshot = self.__gui.getScreenshot()
+            #time.sleep(_DETECTION_INTERVAL*4)\
+            '''
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_CARD_SYNTHESIS_CARD_PATH,screenshot,0.97)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_CARD_SYNTHESIS_CARD_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.15,self.__startX,self.__startY)
+                continue
+            '''
+            self.__gui.clickCoordinate(self.__windowWidth*random.uniform(0.3,0.4),self.__windowHeight*random.uniform(0.35,0.45),1,0.105)
+            self.__gui.clickCoordinate(self.__windowWidth*random.uniform(0.3,0.4),self.__windowHeight*random.uniform(0.55,0.65),1,0.105)
+            self.__gui.clickCoordinate(self.__windowWidth*random.uniform(0.3,0.4),self.__windowHeight*random.uniform(0.8,0.85),1,0.105)
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_CARD_SYNTHESIS_START_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_CARD_SYNTHESIS_START_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.15,self.__startX,self.__startY)
+                break
 #
     def detectPause(self):
         global _isPaused
@@ -696,9 +877,13 @@ class Account(threading.Thread):
         _localVariable.isFailureDetected=False
         _localVariable.detectCount=10
         _localVariable.xDirection=-1.0
+
+        _localVariable.isEmpty=False
+        _localVariable.startClickCount=0
+        _localVariable.isInfoDelayed=False
         count=0
         while self.__total-count>0:
-            seconds=1
+            seconds=0
             while seconds:
                 printWithTime("账户:%s:"%(str(self.__id))+str(seconds)+"s后开始")
                 time.sleep(1)
@@ -723,9 +908,16 @@ class Account(threading.Thread):
             elif self.__gameMode==4:
                 self.gameModeBreach()
             elif self.__gameMode==5:
-                self.gameModeClubBreach()
+                self.gameModeTeamBattle()
             elif self.__gameMode==6:
                 self.gameModeSeal()
+            elif self.__gameMode==7:
+                self.gameModeInviteClubMembers()
+            elif self.__gameMode==8:
+                _localVariable.startClickCount=0
+                self.gameModeClubBreach()
+            elif self.__gameMode==9:
+                self.gameModeCardSynthesis()
             count+=1
             message="%s:账户:%s:游戏类型:%s,已完成%s局,还剩余%s局"%(getTimeFormatted(),str(self.__id),str(self.__gameMode),str(count),str(self.__total-count))
             threading.Thread(None,self.feedback,str(self.__id),args=(message,)).start()
