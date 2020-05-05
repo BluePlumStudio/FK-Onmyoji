@@ -494,7 +494,7 @@ class Account(threading.Thread):
             position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BATTLE_READY_PATH,screenshot)
             if position != None:
                 printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_CLUB_BATTLE_READY_PATH,position.left,position.top))
-                self.__gui.clickPositionWithOffsets(position,2,0.2,self.__startX,self.__startY)
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
                 time.sleep(_DETECTION_INTERVAL*4)
 
                 while True:
@@ -610,7 +610,7 @@ class Account(threading.Thread):
         printWithTime("消息:账户:%s:寮结界突破"%(str(self.__id)))
         while True:
             screenshot = self.__gui.getScreenshot()
-            time.sleep(_DETECTION_INTERVAL*3)
+            time.sleep(_DETECTION_INTERVAL*4)
 
             if _localVariable.isInfoDelayed==True:
                 message="消息:账户:%s:寮结界信息滞后，尝试刷新"%(str(self.__id))
@@ -621,6 +621,10 @@ class Account(threading.Thread):
                 if position != None:
                     printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_CLUB_BREACH_CLOSE_PATH,position.left,position.top))
                     self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                    while True:
+                        if not self.__gui.clickImageWithOffsets(IMAGE_CLUB_BREACH_CLOSE_PATH,1,0.2):
+                            break
+                        printWithTime("消息:账户:%s:检测到图像:%s:位置"%(str(self.__id),IMAGE_CLUB_BREACH_CLOSE_PATH))
                     continue
             
             position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BREACH_CLUB_PATH,screenshot,0.95)
@@ -641,6 +645,7 @@ class Account(threading.Thread):
 
             position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BREACH_START_PATH,screenshot)
             if position != None:
+                _localVariable.isEmpty=False
                 printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_CLUB_BREACH_START_PATH,position.left,position.top))
                 self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
                 _localVariable.startClickCount+=1
