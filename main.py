@@ -20,7 +20,7 @@ def main():
     while accountCount:
         accountCount-=1
 
-        gameMode=int(inputWithTimePrompt("游戏类型:\n(1.多人御魂/觉醒 2.章节探索 3.单人御魂/业原火/御灵 4.结界突破 5.道馆 6.妖气封印 7.邀请寮成员 8.阴阳寮突破 9.结界卡合成):"))
+        gameMode=int(inputWithTimePrompt("游戏类型:\n(1.多人御魂/觉醒 2.章节探索 3.单人御魂/业原火/御灵 4.结界突破 5.道馆 6.妖气封印 7.邀请寮成员 8.阴阳寮突破 9.结界卡合成 10.百鬼夜行):"))
         count=int(inputWithTimePrompt("局数:"))
         startX=int(inputWithTimePrompt("窗口起始位置X:"))
         startY=int(inputWithTimePrompt("窗口起始位置Y:"))

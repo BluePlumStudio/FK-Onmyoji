@@ -98,6 +98,14 @@ IMAGE_CLUB_BREACH_SCROLL_BAR_PATH="./screenshots/ClubBreach/scrollBar.png"
 
 IMAGE_CARD_SYNTHESIS_CARD_PATH="./screenshots/CardSynthesis/card.png"
 IMAGE_CARD_SYNTHESIS_START_PATH="./screenshots/CardSynthesis/start.png"
+
+IMAGE_DEVILS_NIGHT_ENTER_PATH="./screenshots/DevilsNight/enter.png"
+IMAGE_DEVILS_NIGHT_SELECTED_PATH="./screenshots/DevilsNight/selected.png"
+IMAGE_DEVILS_NIGHT_START_PATH="./screenshots/DevilsNight/start.png"
+IMAGE_DEVILS_NIGHT_BULLET_PATH="./screenshots/DevilsNight/bullet.png"
+IMAGE_DEVILS_NIGHT_UP_PATH="./screenshots/DevilsNight/up.png"
+IMAGE_DEVILS_NIGHT_SHARE_PATH="./screenshots/DevilsNight/share.png"
+IMAGE_DEVILS_NIGHT_OVER_PATH="./screenshots/DevilsNight/over.png"
 #
 _localVariable=threading.local()
 _DETECTION_INTERVAL=0.2
@@ -132,7 +140,7 @@ class Account(threading.Thread):
         self.__id=_accountCount
         _accountCount+=1
 
-        if self.__gameMode!=4 and self.__gameMode!=6 and self.__gameMode!=8 and self.__gameMode!=9:
+        if self.__gameMode!=4 and self.__gameMode!=6 and self.__gameMode!=8 and self.__gameMode!=9 and self.__gameMode!=10:
             self._detectFailureThread=threading.Thread(None,self.detectFailure,args=())
             self._detectFailureThread.start()
         self._detectAssistance=threading.Thread(None,self.detectAssistance,args=())
@@ -378,6 +386,8 @@ class Account(threading.Thread):
 
                 position=self.__gui.getImagePositionInScreenshot(IMAGE_STROY_ACCEPT_PATH,screenshot)
                 if position != None:
+                    if position.left <= self.__windowWidth*0.08:
+                        continue
                     message="消息:账户:%s:已尝试接受新一轮章节探索"%(str(self.__id))
                     printWithTime(message)
                     threading.Thread(None,self.feedback,str(self.__id),args=(message,)).start()
@@ -610,7 +620,7 @@ class Account(threading.Thread):
         printWithTime("消息:账户:%s:寮结界突破"%(str(self.__id)))
         while True:
             screenshot = self.__gui.getScreenshot()
-            time.sleep(_DETECTION_INTERVAL*4)
+            time.sleep(_DETECTION_INTERVAL*6)
 
             if _localVariable.isInfoDelayed==True:
                 message="消息:账户:%s:寮结界信息滞后，尝试刷新"%(str(self.__id))
@@ -732,6 +742,52 @@ class Account(threading.Thread):
                 printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_CARD_SYNTHESIS_START_PATH,position.left,position.top))
                 self.__gui.clickPositionWithOffsets(position,1,0.15,self.__startX,self.__startY)
                 break
+#
+    def gameModeDevilsNight(self):
+        printWithTime("消息:账户:%s:百鬼夜行"%(str(self.__id)))
+        while True:
+            screenshot = self.__gui.getScreenshot()
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_DEVILS_NIGHT_UP_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_DEVILS_NIGHT_UP_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.101,self.__startX,self.__startY)
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_DEVILS_NIGHT_BULLET_PATH,screenshot)
+            if position != None:
+                self.__gui.clickCoordinate(self.__windowWidth*random.uniform(0.1,0.9),self.__windowHeight*random.uniform(0.7,0.8),1,0.101)
+                self.__gui.clickCoordinate(self.__windowWidth*random.uniform(0.1,0.9),self.__windowHeight*random.uniform(0.7,0.8),1,0.101)
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_DEVILS_NIGHT_ENTER_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_DEVILS_NIGHT_ENTER_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_DEVILS_NIGHT_SELECTED_PATH,screenshot)
+            if not position:
+                printWithTime("消息:账户:%s:尝试随机选择式神"%(str(self.__id)))
+                self.__gui.clickCoordinate(self.__windowWidth*random.uniform(0.16,0.84),self.__windowHeight*random.uniform(0.66,0.8),1,0.105)
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_DEVILS_NIGHT_START_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_DEVILS_NIGHT_START_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_DEVILS_NIGHT_OVER_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_DEVILS_NIGHT_OVER_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+
+                while True:
+                    if not self.__gui.clickImageWithOffsets(IMAGE_DEVILS_NIGHT_OVER_PATH,1,0.2):
+                        break
+                    printWithTime("消息:账户:%s:检测到图像:%s:位置"%(str(self.__id),IMAGE_DEVILS_NIGHT_OVER_PATH))
+                break  
+
 #
     def detectPause(self):
         global _isPaused
@@ -923,6 +979,8 @@ class Account(threading.Thread):
                 self.gameModeClubBreach()
             elif self.__gameMode==9:
                 self.gameModeCardSynthesis()
+            elif self.__gameMode==10:
+                self.gameModeDevilsNight() 
             count+=1
             message="%s:账户:%s:游戏类型:%s,已完成%s局,还剩余%s局"%(getTimeFormatted(),str(self.__id),str(self.__gameMode),str(count),str(self.__total-count))
             threading.Thread(None,self.feedback,str(self.__id),args=(message,)).start()
