@@ -169,10 +169,12 @@ class Account(threading.Thread):
         while True:
             screenshot = self.__gui.getScreenshot()
             time.sleep(_DETECTION_INTERVAL)
+            ###-------------------------------------------------
+            #这部分是多人御魂/觉醒的组队确认界面
 
             if self.__isCaptain:
                 if _globalConfig.isFullTeam:
-                    position=self.__gui.getImagePositionInScreenshot(IMAGE_MITAMA_INVITE_PATH,screenshot)
+                    position=self.__gui.getImagePositionInScreenshot(IMAGE_MITAMA_INVITE_PATH,screenshot)#邀请
                     if position == None:
                         position=self.__gui.getImagePositionInScreenshot(IMAGE_MITAMA_START_PATH,screenshot)
                         if position != None:
@@ -185,7 +187,9 @@ class Account(threading.Thread):
                         printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_MITAMA_START_PATH,position.left,position.top))
                         self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
                         continue
-            
+
+            ###------------------------------------------------
+
             position=self.__gui.getImagePositionInScreenshot(IMAGE_MITAMA_FINISHED1_PATH,screenshot)
             if position != None:
                 printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_MITAMA_FINISHED1_PATH,position.left,position.top))
@@ -212,32 +216,69 @@ class Account(threading.Thread):
             screenshot = self.__gui.getScreenshot()
             time.sleep(_DETECTION_INTERVAL)
 
+
+
             if self.__isCaptain:
-                if not self.__gui.getImagePositionInScreenshot(IMAGE_STROY_CHERRY_CAKE_PATH,screenshot):
-                    position=self.__gui.getImagePositionInScreenshot(IMAGE_STROY_INVITE_PATH,screenshot)
-                    '''
-                    if position != None:
-                        winsound.Beep(500,1000)
-                    '''
-                    if position != None:
-                        _localVariable.isBossDetected=False
-                        printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_STROY_INVITE_PATH,position.left,position.top))
-                        self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
-                        continue
 
-                    position=self.__gui.getImagePositionInScreenshot(IMAGE_STROY_INVITATION_CONFIRMED_PATH,screenshot)
-                    if position != None:
-                        _localVariable.isBossDetected=False
-                        printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_STROY_INVITATION_CONFIRMED_PATH,position.left,position.top))
-                        self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
-                        continue
+                #####################################################################################
+                # if not self.__gui.getImagePositionInScreenshot(IMAGE_STROY_CHERRY_CAKE_PATH,screenshot):
+                #     position=self.__gui.getImagePositionInScreenshot(IMAGE_STROY_INVITE_PATH,screenshot)
+                #     '''
+                #     if position != None:
+                #         winsound.Beep(500,1000)
+                #     '''
+                #     if position != None:
+                #         _localVariable.isBossDetected=False
+                #         printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_STROY_INVITE_PATH,position.left,position.top))  #邀请
+                #         self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                #         continue
+                #
+                #     position=self.__gui.getImagePositionInScreenshot(IMAGE_STROY_INVITATION_CONFIRMED_PATH,screenshot)  #路径，邀请确认
+                #     if position != None:
+                #         _localVariable.isBossDetected=False
+                #         printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_STROY_INVITATION_CONFIRMED_PATH,position.left,position.top)) #接受邀请
+                #         self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                #         continue
+                #
+                #     position=self.__gui.getImagePositionInScreenshot(IMAGE_STROY_START_PATH,screenshot)
+                #     if position != None:
+                #         _localVariable.isBossDetected=False
+                #         printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_STROY_START_PATH,position.left,position.top)) #以上都没有，检测开始按钮。
+                #         self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                #         continue
 
-                    position=self.__gui.getImagePositionInScreenshot(IMAGE_STROY_START_PATH,screenshot)
-                    if position != None:
-                        _localVariable.isBossDetected=False
-                        printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_STROY_START_PATH,position.left,position.top))
-                        self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
-                        continue
+
+                #这部分全部注释掉
+                ###############################################################################################
+
+
+
+
+                #直接套用多人御魂部分尝试,经过测试可用
+                #但是有一个bug，就是有可能点击多下开始，点到饼的小圈圈导致卡在那个界面，在下面尝试解决
+                #经过测试，虽然没有通过直接添加单词点击进行解决，但是多次拖拽就可以直接关闭掉误触的小纸人界面，使程序正常运行。
+                #但是直接复制粘贴过来也有一个毛病，那就是单人探索模式由于不懂原理，直接给改没了。这里仍需要完善
+
+                if self.__isCaptain:
+                    if _globalConfig.isFullTeam:
+                        position = self.__gui.getImagePositionInScreenshot(IMAGE_MITAMA_INVITE_PATH, screenshot)  # 邀请
+                        if position == None:
+                            position = self.__gui.getImagePositionInScreenshot(IMAGE_MITAMA_START_PATH, screenshot)
+                            if position != None:
+                                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f" % (
+                                str(self.__id), IMAGE_MITAMA_START_PATH, position.left, position.top))
+                                self.__gui.clickPositionWithOffsets(position, 1, 0.2, self.__startX, self.__startY)
+                                continue
+                    else:
+                        position = self.__gui.getImagePositionInScreenshot(IMAGE_MITAMA_START_PATH, screenshot)
+                        if position != None:
+                            printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f" % (
+                            str(self.__id), IMAGE_MITAMA_START_PATH, position.left, position.top))
+                            self.__gui.clickPositionWithOffsets(position, 1, 0.2, self.__startX, self.__startY)
+                            continue
+
+
+                #############################################################
 
                 #检测目标
                 if not _localVariable.isBossDetected and self.__gui.getImagePositionInScreenshot(IMAGE_STROY_CHERRY_CAKE_PATH,screenshot) and _localVariable.detectCount:
@@ -245,7 +286,9 @@ class Account(threading.Thread):
                     if (not self.__gui.isImageDetected(IMAGE_STROY_FIGHT_PATH)
                         and not self.__gui.isImageDetected(IMAGE_STROY_FIGHT_BOSS_PATH)):
                         self.__gui.setMouseToRandomPosition(self.__windowWidth*0.3,self.__windowHeight*0.3,0.4,0.4)
+                        #这里应该就是当无法检测到战斗标准时候的点击操作。
                         self.__gui.dragMouseToRandomPosition(_localVariable.xDirection,random.uniform(0.01,0.1))
+                        #这句是拖拽的代码
                         printWithTime("账户:%s:第%s次检测:%s"
                                     %(str(self.__id),str(10-_localVariable.detectCount),IMAGE_STROY_FIGHT_PATH))
                         printWithTime("账户:%s:第%s次检测:%s"
@@ -346,7 +389,7 @@ class Account(threading.Thread):
                     
                     innerThread=threading.Thread(None,inner,str(self.__id))
                     innerThread.start()
-                    winsound.Beep(1000,3000)
+                    #winsound.Beep(1000,3000)
                     seconds=30
                     while seconds and not innerThread.isAlive():
                         time.sleep(1.0)
