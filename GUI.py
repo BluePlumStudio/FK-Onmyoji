@@ -5,7 +5,7 @@ import random
 import copy
 
 _GUILocker=threading.Lock()
-_isGUILockerAcquired=False
+#_isGUILockerAcquired=False
 
 class GUI(object):
     def __init__(self,startX,startY,windowWidth,windowHeight):
@@ -17,34 +17,13 @@ class GUI(object):
 #
     def GUIAcquire(self):
         global _GUILocker
-        global _isGUILockerAcquired
 
         _GUILocker.acquire()
-        _isGUILockerAcquired=True
 #
     def GUIRelease(self):
         global _GUILocker
-        global _isGUILockerAcquired
 
-        if _isGUILockerAcquired:
-            _GUILocker.release()
-            _isGUILockerAcquired=False
-#
-    def GUIIsAcquired(self):
-        global _GUILocker
-        global _isGUILockerAcquired
-
-        return _isGUILockerAcquired
-#
-    def GUITryToAcquire(self):
-        global _GUILocker
-        global _isGUILockerAcquired
-
-        if _isGUILockerAcquired:
-            return False
-        else:
-            self.GUIAcquire()
-            return True
+        _GUILocker.release()
 #
     def updateOperationTime(self):
         self.GUIAcquire()
@@ -57,7 +36,7 @@ class GUI(object):
         self.GUIAcquire()
 
         pyautogui.click()
-        self.__lastOperationTime=time.time()
+        #self.__lastOperationTime=time.time()
 
         self.GUIRelease()
 #
@@ -85,7 +64,7 @@ class GUI(object):
             duration,
             pyautogui.easeInOutQuad)
         pyautogui.click()
-        self.__lastOperationTime=time.time()
+        #self.__lastOperationTime=time.time()
 
         self.GUIRelease()
 #
@@ -94,7 +73,7 @@ class GUI(object):
 
         pyautogui.moveTo(x,y,duration,pyautogui.easeInOutQuad)
         pyautogui.click(x,y,clicks,random.uniform(0.1,1))
-        self.__lastOperationTime=time.time()
+        #self.__lastOperationTime=time.time()
 
         self.GUIRelease()
 #
@@ -111,7 +90,7 @@ class GUI(object):
             offsetWidth,offsetHeight=self.genPositionOffsets(position)
             pyautogui.moveTo(x+offsetWidth+offsetX,y+offsetHeight+offsetY,duration,pyautogui.easeInOutQuad)
             pyautogui.click(x+offsetWidth+offsetX,y+offsetHeight+offsetY,clicks,random.uniform(0.1,1))
-            self.__lastOperationTime=time.time()
+            #self.__lastOperationTime=time.time()
             ret=True
         else:
             ret=False
@@ -130,7 +109,7 @@ class GUI(object):
             offsetWidth,offsetHeight=self.genPositionOffsets(position)
             pyautogui.moveTo(x+offsetWidth+offsetX,y+offsetHeight+offsetY,duration,pyautogui.easeInOutQuad)
             pyautogui.click(x+offsetWidth+offsetX,y+offsetHeight+offsetY,clicks,random.uniform(0.1,1))
-            self.__lastOperationTime=time.time()
+            #self.__lastOperationTime=time.time()
             ret=True
         else:
             ret=False
@@ -159,16 +138,24 @@ class GUI(object):
         return ret
 #
     def moveToCenter(self,duration=0.1):
+        self.GUIAcquire()
+
         pyautogui.moveTo(self.__startX+self.__windowWidth/2,
             self.__startY+self.__windowHeight/2,
             duration,
             pyautogui.easeInOutQuad)
+
+        self.GUIRelease()
 #
     def moveTo(self,x,y,duration=0.1):
+        self.GUIAcquire()
+
         pyautogui.moveTo(self.__startX+x,
             self.__startY+y,
             duration,
             pyautogui.easeInOutQuad)
+        
+        self.GUIRelease()
 ###
     def getScreenshot(self,imagePath=None):
         return pyautogui.screenshot(imagePath,region=(self.__startX,self.__startY,self.__windowWidth,self.__windowHeight))
@@ -192,7 +179,7 @@ class GUI(object):
         pyautogui.move(moveX,moveY,duration,pyautogui.easeInOutQuad)
         time.sleep(interval)
         pyautogui.mouseUp()
-        self.__lastOperationTime=time.time()
+        #self.__lastOperationTime=time.time()
 
         self.GUIRelease()
 #
@@ -204,7 +191,7 @@ class GUI(object):
         pyautogui.moveTo(x,y,duration,pyautogui.easeInOutQuad)
         time.sleep(interval)
         pyautogui.mouseUp()
-        self.__lastOperationTime=time.time()
+        #self.__lastOperationTime=time.time()
         
         self.GUIRelease()
 #
@@ -212,7 +199,7 @@ class GUI(object):
         self.GUIAcquire()
 
         pyautogui.scroll(clicks)
-        self.__lastOperationTime=time.time()
+        #self.__lastOperationTime=time.time()
         
         self.GUIRelease()
 #

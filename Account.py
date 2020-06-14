@@ -30,6 +30,7 @@ IMAGE_MITAMA_FINISHED2_PATH="./screenshots/Mitama/finished2.png"
 IMAGE_STROY_INVITE_PATH="./screenshots/Story/invite.png"
 IMAGE_STROY_INVITATION_CONFIRMED_PATH="./screenshots/Story/invitationConfirmed.png"
 IMAGE_STROY_START_PATH="./screenshots/Story/start.png"
+IMAGE_STROY_EXPLORE_PATH="./screenshots/Story/explore.png"
 IMAGE_STROY_FIGHT_PATH="./screenshots/Story/fight.png"
 IMAGE_STROY_FIGHT_BOSS_PATH="./screenshots/Story/fightBoss.png"
 IMAGE_STROY_FINISHED1_PATH="./screenshots/Story/finished1.png"
@@ -106,6 +107,9 @@ IMAGE_DEVILS_NIGHT_BULLET_PATH="./screenshots/DevilsNight/bullet.png"
 IMAGE_DEVILS_NIGHT_UP_PATH="./screenshots/DevilsNight/up.png"
 IMAGE_DEVILS_NIGHT_SHARE_PATH="./screenshots/DevilsNight/share.png"
 IMAGE_DEVILS_NIGHT_OVER_PATH="./screenshots/DevilsNight/over.png"
+IMAGE_DEVILS_NIGHT_INVITE_PATH="./screenshots/DevilsNight/invite.png"
+IMAGE_DEVILS_NIGHT_SECTION_PATH="./screenshots/DevilsNight/section.png"
+IMAGE_DEVILS_NIGHT_CLOSE_PATH="./screenshots/DevilsNight/close.png"
 #
 _localVariable=threading.local()
 _DETECTION_INTERVAL=0.2
@@ -227,6 +231,7 @@ class Account(threading.Thread):
 
                     position=self.__gui.getImagePositionInScreenshot(IMAGE_STROY_INVITATION_CONFIRMED_PATH,screenshot)
                     if position != None:
+                        time.sleep(3.0)
                         _localVariable.isBossDetected=False
                         printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_STROY_INVITATION_CONFIRMED_PATH,position.left,position.top))
                         self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
@@ -236,6 +241,13 @@ class Account(threading.Thread):
                     if position != None:
                         _localVariable.isBossDetected=False
                         printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_STROY_START_PATH,position.left,position.top))
+                        self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                        continue
+
+                    position=self.__gui.getImagePositionInScreenshot(IMAGE_STROY_EXPLORE_PATH,screenshot)
+                    if position != None:
+                        _localVariable.isBossDetected=False
+                        printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_STROY_EXPLORE_PATH,position.left,position.top))
                         self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
                         continue
 
@@ -315,7 +327,7 @@ class Account(threading.Thread):
                                 position=self.__gui.getImagePosition(IMAGE_STROY_SELECTED_LEVEL_PATH,accuracy=0.7)
                                 continue          
 
-                            self.__gui.clickPositionWithOffsets(position,2,0.2,self.__startX,self.__startY)    
+                            self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)    
                             if not self.__gui.isImageDetected(IMAGE_STROY_SELECT_LEVEL_PATH,accuracy=0.5):
                                 break      
                         
@@ -358,8 +370,6 @@ class Account(threading.Thread):
                         time.sleep(1.0)
                         seconds-=1
                     stopThread(innerThread)
-                    if not _isPaused:
-                        self.__gui.GUIRelease()
                 
                 position=self.__gui.getImagePositionInScreenshot(IMAGE_STROY_READY_PATH,screenshot)
                 if position != None:
@@ -620,7 +630,7 @@ class Account(threading.Thread):
         printWithTime("消息:账户:%s:寮结界突破"%(str(self.__id)))
         while True:
             screenshot = self.__gui.getScreenshot()
-            time.sleep(_DETECTION_INTERVAL*6)
+            time.sleep(_DETECTION_INTERVAL*4)
 
             if _localVariable.isInfoDelayed==True:
                 message="消息:账户:%s:寮结界信息滞后，尝试刷新"%(str(self.__id))
@@ -653,7 +663,7 @@ class Account(threading.Thread):
                     threading.Thread(None,self.feedback,str(self.__id),args=(message,)).start()
                 continue
 
-            position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BREACH_START_PATH,screenshot)
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BREACH_START_PATH,screenshot,0.8)
             if position != None:
                 _localVariable.isEmpty=False
                 printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_CLUB_BREACH_START_PATH,position.left,position.top))
@@ -744,6 +754,7 @@ class Account(threading.Thread):
                 break
 #
     def gameModeDevilsNight(self):
+        sectionClickCount=0
         printWithTime("消息:账户:%s:百鬼夜行"%(str(self.__id)))
         while True:
             screenshot = self.__gui.getScreenshot()
@@ -760,8 +771,27 @@ class Account(threading.Thread):
                 self.__gui.clickCoordinate(self.__windowWidth*random.uniform(0.1,0.9),self.__windowHeight*random.uniform(0.7,0.8),1,0.101)
                 continue
 
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_DEVILS_NIGHT_SECTION_PATH,screenshot)
+            if position != None:
+                sectionClickCount+=1
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_DEVILS_NIGHT_SECTION_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                if(sectionClickCount>=3):
+                    sectionClickCount=0
+                    self.__gui.moveToCenter(0.15)
+                    self.__gui.dragMouseToRandomPosition(0.1,-1.0)
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_DEVILS_NIGHT_INVITE_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_DEVILS_NIGHT_INVITE_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                time.sleep(2.0)
+                continue
+
             position=self.__gui.getImagePositionInScreenshot(IMAGE_DEVILS_NIGHT_ENTER_PATH,screenshot)
             if position != None:
+                sectionClickCount=0
                 printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_DEVILS_NIGHT_ENTER_PATH,position.left,position.top))
                 self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
                 continue
@@ -813,7 +843,6 @@ class Account(threading.Thread):
             printWithTime(message)
 
             def inner():
-                self.__gui.updateOperationTime()
                 winsound.Beep(800,30000)
                 
                 if _globalConfig.closeGamesAfterFailure:
@@ -853,7 +882,6 @@ class Account(threading.Thread):
             threading.Thread(None,self.feedback,str(self.__id),args=(message,)).start()
             
             def inner():
-                self.__gui.updateOperationTime()
                 winsound.Beep(1000,10000)
 
                 if _globalConfig.closeGamesIfOccupied:
@@ -875,7 +903,6 @@ class Account(threading.Thread):
             self.__gui.clickImageWithOffsets(IMAGE_CLOSE_DIALOG_PATH)
 
             def inner():
-                self.__gui.updateOperationTime()
                 winsound.Beep(1000,5000)
 
                 if _globalConfig.closeGamesIfFoodNotEnough:
@@ -898,7 +925,6 @@ class Account(threading.Thread):
             threading.Thread(None,self.feedback,str(self.__id),args=(message,)).start()
 
             def inner():
-                self.__gui.updateOperationTime()
                 winsound.Beep(1000,3000)
 
                 if _globalConfig.closeGamesIfDisconnected:
