@@ -317,7 +317,7 @@ class Account(threading.Thread):
                                 position=self.__gui.getImagePosition(IMAGE_STROY_SELECT_LEVEL_PATH,accuracy=0.5)
                                 continue
                             
-                            self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                            self.__gui.clickPositionWithOffsets(position,1,0.2)
                             if self.__gui.isImageDetected(IMAGE_STROY_SELECTED_LEVEL_PATH,accuracy=0.7):
                                 break
                         
@@ -327,7 +327,7 @@ class Account(threading.Thread):
                                 position=self.__gui.getImagePosition(IMAGE_STROY_SELECTED_LEVEL_PATH,accuracy=0.7)
                                 continue          
 
-                            self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)    
+                            self.__gui.clickPositionWithOffsets(position,1,0.2)    
                             if not self.__gui.isImageDetected(IMAGE_STROY_SELECT_LEVEL_PATH,accuracy=0.5):
                                 break      
                         
