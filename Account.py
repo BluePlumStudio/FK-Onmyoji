@@ -21,6 +21,7 @@ IMAGE_OCCUPIED_PATH="./screenshots/occupied.png"
 IMAGE_FOOD_INSUFFICIENCY_PATH="./screenshots/food.png"
 IMAGE_CLOSE_DIALOG_PATH="./screenshots/close.png"
 IMAGE_DISCONNECTED_PATH="./screenshots/disconnected.png"
+IMAGE_REPAIR_PATH="./screenshots/repair.png"
 IMAGE_UNSTARTED_PATH="./screenshots/unstarted.png"
 
 IMAGE_MITAMA_INVITE_PATH="./screenshots/Mitama/teamInvite.png"
