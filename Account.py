@@ -21,6 +21,7 @@ IMAGE_OCCUPIED_PATH="./screenshots/occupied.png"
 IMAGE_FOOD_INSUFFICIENCY_PATH="./screenshots/food.png"
 IMAGE_CLOSE_DIALOG_PATH="./screenshots/close.png"
 IMAGE_DISCONNECTED_PATH="./screenshots/disconnected.png"
+IMAGE_UNSTARTED_PATH="./screenshots/unstarted.png"
 
 IMAGE_MITAMA_INVITE_PATH="./screenshots/Mitama/teamInvite.png"
 IMAGE_MITAMA_START_PATH="./screenshots/Mitama/start.png"
@@ -189,6 +190,12 @@ class Account(threading.Thread):
                         printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_MITAMA_START_PATH,position.left,position.top))
                         self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
                         continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_REPAIR_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_REPAIR_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,2,0.2,self.__startX,self.__startY)
+                continue
             
             position=self.__gui.getImagePositionInScreenshot(IMAGE_MITAMA_FINISHED1_PATH,screenshot)
             if position != None:
@@ -279,6 +286,12 @@ class Account(threading.Thread):
                     _localVariable.isBossDetected=True
                     continue
 
+                position=self.__gui.getImagePositionInScreenshot(IMAGE_REPAIR_PATH,screenshot)
+                if position != None:
+                    printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_REPAIR_PATH,position.left,position.top))
+                    self.__gui.clickPositionWithOffsets(position,2,0.2,self.__startX,self.__startY)
+                    continue
+            
                 position=self.__gui.getImagePositionInScreenshot(IMAGE_STROY_FINISHED1_PATH,screenshot)
                 if position != None:
                     printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_STROY_FINISHED1_PATH,position.left,position.top))
@@ -317,7 +330,7 @@ class Account(threading.Thread):
                                 position=self.__gui.getImagePosition(IMAGE_STROY_SELECT_LEVEL_PATH,accuracy=0.5)
                                 continue
                             
-                            self.__gui.clickPositionWithOffsets(position,1,0.2)
+                            self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
                             if self.__gui.isImageDetected(IMAGE_STROY_SELECTED_LEVEL_PATH,accuracy=0.7):
                                 break
                         
@@ -327,7 +340,7 @@ class Account(threading.Thread):
                                 position=self.__gui.getImagePosition(IMAGE_STROY_SELECTED_LEVEL_PATH,accuracy=0.7)
                                 continue          
 
-                            self.__gui.clickPositionWithOffsets(position,1,0.2)    
+                            self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)    
                             if not self.__gui.isImageDetected(IMAGE_STROY_SELECT_LEVEL_PATH,accuracy=0.5):
                                 break      
                         
@@ -429,6 +442,12 @@ class Account(threading.Thread):
                 printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_MITAMA_X_START_PATH,position.left,position.top))
                 self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
                 continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_REPAIR_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_REPAIR_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,2,0.2,self.__startX,self.__startY)
+                continue
             
             position=self.__gui.getImagePositionInScreenshot(IMAGE_MITAMA_X_FINISHED1_PATH,screenshot)
             if position != None:
@@ -463,6 +482,7 @@ class Account(threading.Thread):
             if position != None:
                 printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_BREACH_SECTION_PATH,position.left,position.top))
                 self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                time.sleep(_DETECTION_INTERVAL*4)
                 continue
             ''''''
             position=self.__gui.getImagePositionInScreenshot(IMAGE_BREACH_SELECTION_MARK_PATH,screenshot)
@@ -475,6 +495,12 @@ class Account(threading.Thread):
                 self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
                 continue
             ''''''
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_REPAIR_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_REPAIR_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,2,0.2,self.__startX,self.__startY)
+                continue
+            
             position=self.__gui.getImagePositionInScreenshot(IMAGE_BREACH_FINISHED1_PATH,screenshot)
             if position != None:
                 printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_BREACH_FINISHED1_PATH,position.left,position.top))
@@ -585,7 +611,13 @@ class Account(threading.Thread):
                 printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_SEAL_READY_PATH,position.left,position.top))
                 self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
                 continue
-
+            
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_REPAIR_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_REPAIR_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,2,0.2,self.__startX,self.__startY)
+                continue
+            
             position=self.__gui.getImagePositionInScreenshot(IMAGE_SEAL_FINISHED1_PATH,screenshot)
             if position != None:
                 printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_SEAL_FINISHED1_PATH,position.left,position.top))
@@ -690,6 +722,13 @@ class Account(threading.Thread):
                 self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
                 continue
             ''''''
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_REPAIR_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_REPAIR_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,2,0.2,self.__startX,self.__startY)
+                continue
+            
             position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BREACH_FINISHED1_PATH,screenshot)
             if position != None:
                 printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_CLUB_BREACH_FINISHED1_PATH,position.left,position.top))
@@ -870,6 +909,7 @@ class Account(threading.Thread):
             message="消息:账户:%s:已尝试接受悬赏封印邀请"%(str(self.__id))
             printWithTime(message)
             threading.Thread(None,self.feedback,str(self.__id),args=(message,)).start()
+
 #
     def detectOccupation(self):
         while True:
@@ -917,22 +957,22 @@ class Account(threading.Thread):
     def detectDisconnection(self):
         while True:
             time.sleep(_DETECTION_INTERVAL*20)
-            if not self.__gui.isImageDetected(IMAGE_DISCONNECTED_PATH):
+            if (not self.__gui.isImageDetected(IMAGE_DISCONNECTED_PATH)) and (not self.__gui.isImageDetected(IMAGE_UNSTARTED_PATH)):
                 continue
 
-            message="错误:账户:%s:检测到已断开连接"%(str(self.__id))
+            message="错误:账户:%s:检测到已断开连接或者不在组队界面"%(str(self.__id))
             printWithTime(message)
             threading.Thread(None,self.feedback,str(self.__id),args=(message,)).start()
 
             def inner():
-                winsound.Beep(1000,3000)
+#                winsound.Beep(1000,3000)
 
                 if _globalConfig.closeGamesIfDisconnected:
                     os.system("taskkill /IM onmyoji.exe /F")
                 if _globalConfig.closeGamesIfDisconnected:
                     sys.exit()
                 
-                winsound.Beep(1000,1000)
+#                winsound.Beep(1000,1000)
                 
             threading.Thread(None,inner,str(str(self.__id))).start()
 #
