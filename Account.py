@@ -26,6 +26,12 @@ IMAGE_MITAMA_INVITE_PATH="./screenshots/Mitama/teamInvite.png"
 IMAGE_MITAMA_START_PATH="./screenshots/Mitama/start.png"
 IMAGE_MITAMA_FINISHED1_PATH="./screenshots/Mitama/finished1.png"
 IMAGE_MITAMA_FINISHED2_PATH="./screenshots/Mitama/finished2.png"
+IMAGE_MITAMA_CONFIRM_PATH="./screenshots/Mitama/confirm.png"
+IMAGE_MITAMA_CONFIRM2_PATH="./screenshots/Mitama/confirm2.png"
+IMAGE_MITAMA_RADIO_PATH="./screenshots/Mitama/radio.png"
+IMAGE_MITAMA_RADIO_SELECTED_PATH="./screenshots/Mitama/radioSelected.png"
+IMAGE_MITAMA_ACCEPT_PATH="./screenshots/Mitama/accept.png"
+
 
 IMAGE_STROY_INVITE_PATH="./screenshots/Story/invite.png"
 IMAGE_STROY_INVITATION_CONFIRMED_PATH="./screenshots/Story/invitationConfirmed.png"
@@ -144,7 +150,7 @@ class Account(threading.Thread):
         self.__id=_accountCount
         _accountCount+=1
 
-        if self.__gameMode!=4 and self.__gameMode!=6 and self.__gameMode!=8 and self.__gameMode!=9 and self.__gameMode!=10:
+        if self.__gameMode!=4 and self.__gameMode!=6 and self.__gameMode!=8 and self.__gameMode!=9 and self.__gameMode!=10 and _globalConfig.closeGamesAfterFailure and _globalConfig.exitAfterFailure:
             self._detectFailureThread=threading.Thread(None,self.detectFailure,args=())
             self._detectFailureThread.start()
         self._detectAssistance=threading.Thread(None,self.detectAssistance,args=())
@@ -172,9 +178,50 @@ class Account(threading.Thread):
         printWithTime("消息:账户:%s:多人御魂/觉醒"%(str(self.__id)))
         while True:
             screenshot = self.__gui.getScreenshot()
-            time.sleep(_DETECTION_INTERVAL)
+            #time.sleep(_DETECTION_INTERVAL)
+            if _localVariable.isFailureDetected:
+                position=self.__gui.getImagePositionInScreenshot(IMAGE_MITAMA_CONFIRM2_PATH,screenshot)
+                if position != None:
+                    if position.left <= self.__windowWidth*0.145:
+                        continue
+                    printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_MITAMA_CONFIRM2_PATH,position.left,position.top))
+                    self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                    
+                    while True:
+                        if not self.__gui.clickImageWithOffsets(IMAGE_MITAMA_CONFIRM2_PATH,1,0.2):
+                            _localVariable.isFailureDetected=False
+                            break
+                        printWithTime("消息:账户:%s:检测到图像:%s:位置"%(str(self.__id),IMAGE_MITAMA_CONFIRM2_PATH))
+                    continue  
+
+                position=self.__gui.getImagePositionInScreenshot(IMAGE_MITAMA_RADIO_PATH,screenshot)
+                if position != None:
+                    printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_MITAMA_RADIO_PATH,position.left,position.top))
+                    self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                    
+                    while True:
+                        if not self.__gui.clickImageWithOffsets(IMAGE_MITAMA_RADIO_PATH,1,0.2):
+                            _localVariable.isFailureDetected=False
+                            break
+                        printWithTime("消息:账户:%s:检测到图像:%s:位置"%(str(self.__id),IMAGE_MITAMA_RADIO_PATH))
+                    continue  
+
+                position=self.__gui.getImagePositionInScreenshot(IMAGE_MITAMA_ACCEPT_PATH,screenshot)
+                if position != None:
+                    if position.left <= self.__windowWidth*0.08:
+                        continue
+                    printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_MITAMA_ACCEPT_PATH,position.left,position.top))
+                    self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                    continue
 
             if self.__isCaptain:
+                position=self.__gui.getImagePositionInScreenshot(IMAGE_MITAMA_CONFIRM_PATH,screenshot)
+                if position != None:
+                    time.sleep(1.0)
+                    printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_MITAMA_CONFIRM_PATH,position.left,position.top))
+                    self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                    continue
+
                 if _globalConfig.isFullTeam:
                     position=self.__gui.getImagePositionInScreenshot(IMAGE_MITAMA_INVITE_PATH,screenshot)
                     if position == None:
@@ -206,6 +253,17 @@ class Account(threading.Thread):
                         break
                     printWithTime("消息:账户:%s:检测到图像:%s:位置"%(str(self.__id),IMAGE_MITAMA_FINISHED2_PATH))
                 break  
+            
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_FAILED_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_FAILED_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                _localVariable.isFailureDetected=True
+                if not _globalConfig.closeGamesAfterFailure and not _globalConfig.exitAfterFailure:
+                    message="消息:账户:%s:失败，准备重试"%(str(self.__id))
+                    printWithTime(message)
+                    threading.Thread(None,self.feedback,str(self.__id),args=(message,)).start()
+            
 #
     def gameModeStory(self):
         global _fullShikigamiCount
