@@ -585,7 +585,7 @@ class Account(threading.Thread):
         printWithTime("消息:账户:%s:妖气封印"%(str(self.__id)))
         while True:
             screenshot = self.__gui.getScreenshot()
-            time.sleep(_DETECTION_INTERVAL*4)
+            time.sleep(_DETECTION_INTERVAL*3)
 
             position=self.__gui.getImagePositionInScreenshot(IMAGE_FAILED_PATH,screenshot)
             if position != None:
