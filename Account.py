@@ -151,7 +151,7 @@ class Account(threading.Thread):
         self.__id=_accountCount
         _accountCount+=1
 
-        if self.__gameMode!=4 and self.__gameMode!=6 and self.__gameMode!=8 and self.__gameMode!=9 and self.__gameMode!=10 and _globalConfig.closeGamesAfterFailure and _globalConfig.exitAfterFailure:
+        if self.__gameMode!=3 and self.__gameMode!=4 and self.__gameMode!=6 and self.__gameMode!=8 and self.__gameMode!=9 and self.__gameMode!=10 and _globalConfig.closeGamesAfterFailure and _globalConfig.exitAfterFailure:
             self._detectFailureThread=threading.Thread(None,self.detectFailure,args=())
             self._detectFailureThread.start()
         self._detectAssistance=threading.Thread(None,self.detectAssistance,args=())
@@ -505,6 +505,12 @@ class Account(threading.Thread):
                         break
                     printWithTime("消息:账户:%s:检测到图像:%s:位置"%(str(self.__id),IMAGE_MITAMA_X_FINISHED2_PATH))
                 break 
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_FAILED_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_FAILED_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
 #
     def gameModeBreach(self):
         printWithTime("消息:账户:%s:结界突破"%(str(self.__id)))
