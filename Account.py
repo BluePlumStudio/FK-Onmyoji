@@ -398,7 +398,8 @@ class Account(threading.Thread):
                                 position=self.__gui.getImagePosition(IMAGE_STROY_SHIKIGAMI_SELECTED_PATH)
                                 if position:
                                     break
-                                self.__gui.moveToCenter()
+                                #self.__gui.moveToCenter()
+                                self.__gui.moveTo(self.__startX+self.__windowWidth/2,self.__startY+self.__windowHeight*4/5,0.11)
                                 self.__gui.scroll(-200)
                             
                             self.__gui.moveToImage(IMAGE_STROY_SHIKIGAMI_SELECTED_PATH)
