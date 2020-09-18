@@ -11,6 +11,10 @@ from GUI import *
 
 screenWidth,screenHeight=pyautogui.size()
 
+IMAGE_ACTIVITY_START_PATH="./screenshots/activity/start.png"
+IMAGE_ACTIVITY_FINISHED_1_PATH="./screenshots/activity/finished1.png"
+IMAGE_ACTIVITY_FINISHED_2_PATH="./screenshots/activity/finished2.png"
+
 IMAGE_FAILED_PATH="./screenshots/failed.png"
 IMAGE_SCREENSHOT_PATH="./screenshots/screenshot.png"
 IMAGE_CONNECTING_PATH="./screenshots/connecting.png"
@@ -63,6 +67,8 @@ IMAGE_MITAMA_X_FINISHED2_PATH="./screenshots/MitamaX/finished2.png"
 
 IMAGE_BREACH_START_PATH="./screenshots/Breach/start.png"
 IMAGE_BREACH_SECTION_PATH="./screenshots/Breach/section.png"
+IMAGE_BREACH_SECTION_2_PATH="./screenshots/Breach/section2.png"
+IMAGE_BREACH_SECTION_3_PATH="./screenshots/Breach/section3.png"
 IMAGE_BREACH_FINISHED1_PATH="./screenshots/Breach/finished1.png"
 IMAGE_BREACH_FINISHED2_PATH="./screenshots/Breach/finished2.png"
 IMAGE_BREACH_SHIKIGAMI_SELECTED_PATH="./screenshots/Breach/shikigamiSelected.png"
@@ -174,6 +180,34 @@ class Account(threading.Thread):
     @property
     def accountCount(self):
         return _accountCount
+#
+    def gameModeActivity(self):
+        printWithTime("消息:账户:%s:实时活动"%(str(self.__id)))
+        while True:
+            screenshot = self.__gui.getScreenshot()
+            time.sleep(_DETECTION_INTERVAL)
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_ACTIVITY_START_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_ACTIVITY_START_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,2,0.2,self.__startX,self.__startY)
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_ACTIVITY_FINISHED_1_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_ACTIVITY_FINISHED_1_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,2,0.2,self.__startX,self.__startY)
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_ACTIVITY_FINISHED_2_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_ACTIVITY_FINISHED_2_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                
+                while True:
+                    if not self.__gui.clickImageWithOffsets(IMAGE_ACTIVITY_FINISHED_2_PATH,1,0.2):
+                        break
+                    printWithTime("消息:账户:%s:检测到图像:%s:位置"%(str(self.__id),IMAGE_ACTIVITY_FINISHED_2_PATH))
+                break  
 #
     def gameModeMitama(self):
         printWithTime("消息:账户:%s:多人御魂/觉醒"%(str(self.__id)))
@@ -517,9 +551,9 @@ class Account(threading.Thread):
         printWithTime("消息:账户:%s:结界突破"%(str(self.__id)))
         while True:
             screenshot = self.__gui.getScreenshot()
-            time.sleep(_DETECTION_INTERVAL*2)
+            time.sleep(_DETECTION_INTERVAL*3)
 
-            position=self.__gui.getImagePositionInScreenshot(IMAGE_BREACH_START_PATH,screenshot)
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_BREACH_START_PATH,screenshot,0.8)
             if position != None:
                 printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_BREACH_START_PATH,position.left,position.top))
                 self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
@@ -530,6 +564,27 @@ class Account(threading.Thread):
                 printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_BREACH_SECTION_PATH,position.left,position.top))
                 self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
                 continue
+            '''
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_BREACH_SECTION_2_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_BREACH_SECTION_2_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                position=self.__gui.getImagePositionInScreenshot(IMAGE_BREACH_START_PATH,screenshot,0.8)
+                if position != None:
+                    printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_BREACH_START_PATH,position.left,position.top))
+                    self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_BREACH_SECTION_3_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_BREACH_SECTION_3_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                position=self.__gui.getImagePositionInScreenshot(IMAGE_BREACH_START_PATH,screenshot,0.8)
+                if position != None:
+                    printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_BREACH_START_PATH,position.left,position.top))
+                    self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+            '''
             ''''''
             position=self.__gui.getImagePositionInScreenshot(IMAGE_BREACH_SELECTION_MARK_PATH,screenshot)
             if position != None:
@@ -1049,8 +1104,9 @@ class Account(threading.Thread):
                 +"\t窗口高度:"+str(self.__windowHeight)+"\n"
                 +"\t局数:"+str(self.__total)+"\n"
                 +"\t是否为房主(Y/N):"+str(self.__isCaptain))
-
-            if self.__gameMode==1:
+            if self.__gameMode==0:
+                self.gameModeActivity()
+            elif self.__gameMode==1:
                 self.gameModeMitama()
             elif self.__gameMode==2:
                 _localVariable.detectCount=10
