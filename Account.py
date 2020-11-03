@@ -37,7 +37,8 @@ IMAGE_MITAMA_CONFIRM2_PATH="./screenshots/Mitama/confirm2.png"
 IMAGE_MITAMA_RADIO_PATH="./screenshots/Mitama/radio.png"
 IMAGE_MITAMA_RADIO_SELECTED_PATH="./screenshots/Mitama/radioSelected.png"
 IMAGE_MITAMA_ACCEPT_PATH="./screenshots/Mitama/accept.png"
-
+IMAGE_MITAMA_FULL_WARNING_PATH="./screenshots/Mitama/fullWarning.png"
+IMAGE_MITAMA_FULL_CONFIRM_PATH="./screenshots/Mitama/fullConfirm.png"
 
 IMAGE_STROY_INVITE_PATH="./screenshots/Story/invite.png"
 IMAGE_STROY_INVITATION_CONFIRMED_PATH="./screenshots/Story/invitationConfirmed.png"
@@ -67,6 +68,7 @@ IMAGE_MITAMA_X_FINISHED1_PATH="./screenshots/MitamaX/finished1.png"
 IMAGE_MITAMA_X_FINISHED2_PATH="./screenshots/MitamaX/finished2.png"
 
 IMAGE_BREACH_START_PATH="./screenshots/Breach/start.png"
+IMAGE_BREACH_START_2_PATH="./screenshots/Breach/start2.png"
 IMAGE_BREACH_SECTION_PATH="./screenshots/Breach/section.png"
 IMAGE_BREACH_SECTION_2_PATH="./screenshots/Breach/section2.png"
 IMAGE_BREACH_SECTION_3_PATH="./screenshots/Breach/section3.png"
@@ -306,6 +308,18 @@ class Account(threading.Thread):
                     printWithTime(message)
                     threading.Thread(None,self.feedback,str(self.__id),args=(message,)).start()
             
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_MITAMA_FULL_WARNING_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_MITAMA_FULL_WARNING_PATH,position.left,position.top))
+                message="警告:账户:%s:仓库御魂已满"%(str(self.__id))
+                printWithTime(message)
+                threading.Thread(None,self.feedback,str(self.__id),args=(message,)).start()
+                position=self.__gui.getImagePositionInScreenshot(IMAGE_MITAMA_FULL_CONFIRM_PATH,screenshot)
+                if position != None:
+                    printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_MITAMA_FULL_CONFIRM_PATH,position.left,position.top))
+                    self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+
 #
     def gameModeStory(self):
         global _fullShikigamiCount
@@ -567,11 +581,18 @@ class Account(threading.Thread):
                 self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
                 continue
 
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_BREACH_START_2_PATH,screenshot,0.8)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_BREACH_START_2_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+
             position=self.__gui.getImagePositionInScreenshot(IMAGE_BREACH_SECTION_PATH,screenshot)
             if position != None:
                 printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_BREACH_SECTION_PATH,position.left,position.top))
                 self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
                 continue
+            
             '''
             position=self.__gui.getImagePositionInScreenshot(IMAGE_BREACH_SECTION_2_PATH,screenshot)
             if position != None:
@@ -622,6 +643,7 @@ class Account(threading.Thread):
             if position != None:
                 printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_BREACH_FAILED_PATH,position.left,position.top))
                 self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                isShikigamiSelected=False
                 continue
 
             position=self.__gui.getImagePositionInScreenshot(IMAGE_BREACH_BREACH_PATH,screenshot)
@@ -793,7 +815,7 @@ class Account(threading.Thread):
                 self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
                 continue
 
-            position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BREACH_EMPTY_PATH,screenshot,0.8)
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BREACH_EMPTY_PATH,screenshot)
             if position != None:
                 if not _localVariable.isEmpty:
                     _localVariable.isEmpty=True
@@ -833,6 +855,7 @@ class Account(threading.Thread):
                 
                 while True:
                     if not self.__gui.clickImageWithOffsets(IMAGE_CLUB_BREACH_FINISHED2_PATH):
+                        isShikigamiSelected=False
                         break
                     printWithTime("消息:账户:%s:检测到图像:%s"%(str(self.__id),IMAGE_CLUB_BREACH_FINISHED2_PATH))
                 break
@@ -841,6 +864,7 @@ class Account(threading.Thread):
             if position != None:
                 printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_CLUB_BREACH_FAILED_PATH,position.left,position.top))
                 self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                isShikigamiSelected=False
                 continue
             '''
             position=self.__gui.getImagePositionInScreenshot(IMAGE_CLUB_BREACH_CLUB_PATH,screenshot,0.95)
