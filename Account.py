@@ -22,6 +22,7 @@ IMAGE_CONNECTING_PATH="./screenshots/connecting.png"
 IMAGE_ASSISTANCE_PATH="./screenshots/assistance.png"
 IMAGE_ASSISTANCE_2_PATH="./screenshots/assistance2.png"
 IMAGE_ASSISTANCE_3_PATH="./screenshots/assistance3.png"
+IMAGE_ASSISTANCE_4_PATH="./screenshots/assistance4.png"
 IMAGE_ACCEPT_PATH="./screenshots/accept.png"
 IMAGE_OCCUPIED_PATH="./screenshots/occupied.png"
 IMAGE_FOOD_INSUFFICIENCY_PATH="./screenshots/food.png"
@@ -1025,7 +1026,7 @@ class Account(threading.Thread):
     def detectAssistance(self):
         while True:
             time.sleep(_DETECTION_INTERVAL*10)
-            if (not self.__gui.isImageDetected(IMAGE_ASSISTANCE_PATH)) and (not self.__gui.isImageDetected(IMAGE_ASSISTANCE_2_PATH)) and (not self.__gui.isImageDetected(IMAGE_ASSISTANCE_3_PATH)):
+            if (not self.__gui.isImageDetected(IMAGE_ASSISTANCE_PATH)) and (not self.__gui.isImageDetected(IMAGE_ASSISTANCE_2_PATH)) and (not self.__gui.isImageDetected(IMAGE_ASSISTANCE_3_PATH)) and (not self.__gui.isImageDetected(IMAGE_ASSISTANCE_4_PATH)):
                 continue
 
             message="消息:账户:%s:检测到悬赏封印邀请"%(str(self.__id))
