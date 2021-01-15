@@ -11,10 +11,14 @@ from GUI import *
 
 screenWidth,screenHeight=pyautogui.size()
 
+IMAGE_ACTIVITY_FULL_PATH="./screenshots/activity/full.png"
 IMAGE_ACTIVITY_START_PATH="./screenshots/activity/start.png"
 IMAGE_ACTIVITY_START_2_PATH="./screenshots/activity/start2.png"
+IMAGE_ACTIVITY_START_3_PATH="./screenshots/activity/start3.png"
 IMAGE_ACTIVITY_FINISHED_1_PATH="./screenshots/activity/finished1.png"
 IMAGE_ACTIVITY_FINISHED_2_PATH="./screenshots/activity/finished2.png"
+IMAGE_ACTIVITY_FAILED_PATH="./screenshots/activity/failed.png"
+IMAGE_ACTIVITY_CLOSE_PATH="./screenshots/activity/close.png"
 
 IMAGE_FAILED_PATH="./screenshots/failed.png"
 IMAGE_SCREENSHOT_PATH="./screenshots/screenshot.png"
@@ -65,6 +69,7 @@ IMAGE_STROY_SHIKIGAMI_SELECTED_PATH="./screenshots/Story/shikigamiSelected.png"
 IMAGE_STROY_SELECTED_LEVEL_PATH="./screenshots/Story/selectedLevel.png"
 
 IMAGE_MITAMA_X_START_PATH="./screenshots/MitamaX/start.png"
+IMAGE_MITAMA_X_READY_PATH="./screenshots/MitamaX/ready.png"
 IMAGE_MITAMA_X_FINISHED1_PATH="./screenshots/MitamaX/finished1.png"
 IMAGE_MITAMA_X_FINISHED2_PATH="./screenshots/MitamaX/finished2.png"
 
@@ -189,24 +194,42 @@ class Account(threading.Thread):
         printWithTime("消息:账户:%s:实时活动"%(str(self.__id)))
         while True:
             screenshot = self.__gui.getScreenshot()
-            time.sleep(_DETECTION_INTERVAL)
+            time.sleep(_DETECTION_INTERVAL*10)
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_ACTIVITY_FULL_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_ACTIVITY_FULL_PATH,position.left,position.top))
+                continue
+
             position=self.__gui.getImagePositionInScreenshot(IMAGE_ACTIVITY_START_PATH,screenshot)
             if position != None:
                 printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_ACTIVITY_START_PATH,position.left,position.top))
-                self.__gui.clickPositionWithOffsets(position,2,0.2,self.__startX,self.__startY)
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                time.sleep(_DETECTION_INTERVAL*8)
                 continue
 
             position=self.__gui.getImagePositionInScreenshot(IMAGE_ACTIVITY_START_2_PATH,screenshot)
             if position != None:
                 printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_ACTIVITY_START_2_PATH,position.left,position.top))
-                self.__gui.clickPositionWithOffsets(position,2,0.2,self.__startX,self.__startY)
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_ACTIVITY_START_3_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_ACTIVITY_START_3_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
                 continue
 
             position=self.__gui.getImagePositionInScreenshot(IMAGE_ACTIVITY_FINISHED_1_PATH,screenshot)
             if position != None:
                 printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_ACTIVITY_FINISHED_1_PATH,position.left,position.top))
-                self.__gui.clickPositionWithOffsets(position,2,0.2,self.__startX,self.__startY)
-                continue
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                
+                while True:
+                    if not self.__gui.clickImageWithOffsets(IMAGE_ACTIVITY_FINISHED_1_PATH,1,0.2):
+                        break
+                    printWithTime("消息:账户:%s:检测到图像:%s:位置"%(str(self.__id),IMAGE_ACTIVITY_FINISHED_1_PATH))
+                break
 
             position=self.__gui.getImagePositionInScreenshot(IMAGE_ACTIVITY_FINISHED_2_PATH,screenshot)
             if position != None:
@@ -217,7 +240,25 @@ class Account(threading.Thread):
                     if not self.__gui.clickImageWithOffsets(IMAGE_ACTIVITY_FINISHED_2_PATH,1,0.2):
                         break
                     printWithTime("消息:账户:%s:检测到图像:%s:位置"%(str(self.__id),IMAGE_ACTIVITY_FINISHED_2_PATH))
-                break  
+                break
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_ACTIVITY_FAILED_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_ACTIVITY_FAILED_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                
+                while True:
+                    if not self.__gui.clickImageWithOffsets(IMAGE_ACTIVITY_FAILED_PATH,1,0.2):
+                        break
+                    printWithTime("消息:账户:%s:检测到图像:%s:位置"%(str(self.__id),IMAGE_ACTIVITY_FAILED_PATH))
+                break
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_ACTIVITY_CLOSE_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_ACTIVITY_CLOSE_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+
 #
     def gameModeMitama(self):
         printWithTime("消息:账户:%s:多人御魂/觉醒"%(str(self.__id)))
@@ -543,6 +584,12 @@ class Account(threading.Thread):
             position=self.__gui.getImagePositionInScreenshot(IMAGE_MITAMA_X_START_PATH,screenshot)
             if position != None:
                 printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_MITAMA_X_START_PATH,position.left,position.top))
+                self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
+                continue
+
+            position=self.__gui.getImagePositionInScreenshot(IMAGE_MITAMA_X_READY_PATH,screenshot)
+            if position != None:
+                printWithTime("消息:账户:%s:检测到图像:%s:位置:X=%.4f,Y=%.4f"%(str(self.__id),IMAGE_MITAMA_X_READY_PATH,position.left,position.top))
                 self.__gui.clickPositionWithOffsets(position,1,0.2,self.__startX,self.__startY)
                 continue
             
